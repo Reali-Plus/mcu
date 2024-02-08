@@ -1,0 +1,11 @@
+CMake Error at /home/raesangur/esp/esp-idf/components/mbedtls/mbedtls/CMakeLists.txt:138 (message):
+  Could not create symbolic link for:
+  /home/raesangur/esp/esp-idf/components/mbedtls/mbedtls/library/error.c -->
+  ln: failed to create symbolic link
+  '/home/raesangur/github/mcu/build/esp-idf/mbedtls/mbedtls/library/error.c':
+  File exists
+
+Call Stack (most recent call first):
+  /home/raesangur/esp/esp-idf/components/mbedtls/mbedtls/library/CMakeLists.txt:186 (link_to_source)
+
+
