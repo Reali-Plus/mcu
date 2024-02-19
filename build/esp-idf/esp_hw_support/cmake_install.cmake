@@ -1,4 +1,4 @@
-# Install script for directory: /home/fabuliste/esp/esp-idf/components/esp_hw_support
+# Install script for directory: /home/raesangur/esp/esp-idf/components/esp_hw_support
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -32,8 +32,13 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "TRUE")
 endif()
 
+# Set default install directory permissions.
+if(NOT DEFINED CMAKE_OBJDUMP)
+  set(CMAKE_OBJDUMP "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/bin/xtensa-esp32s3-elf-objdump")
+endif()
+
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/fabuliste/esp32_PMC/lcd/build/esp-idf/esp_hw_support/port/esp32s3/cmake_install.cmake")
+  include("/home/raesangur/github/mcu/build/esp-idf/esp_hw_support/port/esp32s3/cmake_install.cmake")
 endif()
 

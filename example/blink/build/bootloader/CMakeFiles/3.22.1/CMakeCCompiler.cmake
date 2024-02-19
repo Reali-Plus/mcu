@@ -1,4 +1,4 @@
-set(CMAKE_C_COMPILER "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/bin/xtensa-esp32s3-elf-gcc")
+set(CMAKE_C_COMPILER "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf-gcc/12.2.0_20230208-x86_64-unknown-linux-gnu/bin/xtensa-esp32s3-elf-gcc")
 set(CMAKE_C_COMPILER_ARG1 "")
 set(CMAKE_C_COMPILER_ID "GNU")
 set(CMAKE_C_COMPILER_VERSION "12.2.0")
@@ -21,11 +21,11 @@ set(CMAKE_C_SIMULATE_VERSION "")
 
 
 
-set(CMAKE_AR "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/bin/xtensa-esp32s3-elf-ar")
-set(CMAKE_C_COMPILER_AR "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/bin/xtensa-esp32s3-elf-gcc-ar")
-set(CMAKE_RANLIB "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/bin/xtensa-esp32s3-elf-ranlib")
-set(CMAKE_C_COMPILER_RANLIB "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/bin/xtensa-esp32s3-elf-gcc-ranlib")
-set(CMAKE_LINKER "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/bin/xtensa-esp32s3-elf-ld")
+set(CMAKE_AR "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf-gcc/12.2.0_20230208-x86_64-unknown-linux-gnu/bin/xtensa-esp32s3-elf-ar")
+set(CMAKE_C_COMPILER_AR "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf-gcc/12.2.0_20230208-x86_64-unknown-linux-gnu/bin/xtensa-esp32s3-elf-gcc-ar")
+set(CMAKE_RANLIB "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf-gcc/12.2.0_20230208-x86_64-unknown-linux-gnu/bin/xtensa-esp32s3-elf-ranlib")
+set(CMAKE_C_COMPILER_RANLIB "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf-gcc/12.2.0_20230208-x86_64-unknown-linux-gnu/bin/xtensa-esp32s3-elf-gcc-ranlib")
+set(CMAKE_LINKER "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf-gcc/12.2.0_20230208-x86_64-unknown-linux-gnu/bin/xtensa-esp32s3-elf-ld")
 set(CMAKE_MT "")
 set(CMAKE_COMPILER_IS_GNUCC 1)
 set(CMAKE_C_COMPILER_LOADED 1)
@@ -66,7 +66,7 @@ endif()
 
 
 
-set(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/lib/gcc/xtensa-esp32s3-elf/12.2.0/include;/home/raesangur/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/lib/gcc/xtensa-esp32s3-elf/12.2.0/include-fixed;/home/raesangur/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/xtensa-esp32s3-elf/sys-include;/home/raesangur/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/xtensa-esp32s3-elf/include")
+set(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf-gcc/12.2.0_20230208-x86_64-unknown-linux-gnu/lib/gcc/xtensa-esp32s3-elf/12.2.0/include;/home/raesangur/.espressif/tools/xtensa-esp32s3-elf-gcc/12.2.0_20230208-x86_64-unknown-linux-gnu/lib/gcc/xtensa-esp32s3-elf/12.2.0/include-fixed;/home/raesangur/.espressif/tools/xtensa-esp32s3-elf-gcc/12.2.0_20230208-x86_64-unknown-linux-gnu/xtensa-esp32s3-elf/sys-include;/home/raesangur/.espressif/tools/xtensa-esp32s3-elf-gcc/12.2.0_20230208-x86_64-unknown-linux-gnu/xtensa-esp32s3-elf/include")
 set(CMAKE_C_IMPLICIT_LINK_LIBRARIES "gcc;c;nosys;c;gcc")
-set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/lib/gcc/xtensa-esp32s3-elf/12.2.0;/home/raesangur/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/lib/gcc;/home/raesangur/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/xtensa-esp32s3-elf/lib")
+set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf-gcc/12.2.0_20230208-x86_64-unknown-linux-gnu/lib/gcc/xtensa-esp32s3-elf/12.2.0;/home/raesangur/.espressif/tools/xtensa-esp32s3-elf-gcc/12.2.0_20230208-x86_64-unknown-linux-gnu/lib/gcc;/home/raesangur/.espressif/tools/xtensa-esp32s3-elf-gcc/12.2.0_20230208-x86_64-unknown-linux-gnu/xtensa-esp32s3-elf/lib")
 set(CMAKE_C_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "")

@@ -1,0 +1,242 @@
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x1 (POWERON),boot:0x8 (SPI_FAST_FLASH_BOOT)
+SPIWP:0xee
+Octal Flash Mode Enabled
+For OPI Flash, Use Default Flash Boot Mode
+mode:SLOW_RD, clock div:1
+load:0x3fce3820,len:0x1718
+load:0x403c9700,len:0x4
+load:0x403c9704,len:0xc08
+load:0x403cc700,len:0x2f08
+entry 0x403c990c
+[0;32mI (33) boot: ESP-IDF v5.2-dev-1115-g3a45d4e949 2nd stage bootloader[0m
+[0;32mI (33) boot: compile time Feb  8 2024 14:25:40[0m
+[0;32mI (34) boot: Multicore bootloader[0m
+[0;32mI (38) boot: chip revision: v0.1[0m
+[0;32mI (42) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (47) boot.esp32s3: SPI Mode       : SLOW READ[0m
+[0;32mI (52) boot.esp32s3: SPI Flash Size : 2MB[0m
+[0;32mI (57) boot: Enabling RNG early entropy source...[0m
+[0;32mI (62) boot: Partition Table:[0m
+[0;32mI (66) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (73) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (80) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (88) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (95) boot: End of partition table[0m
+[0;32mI (99) esp_image: segment 0: paddr=00010020 vaddr=3c020020 size=0a4e8h ( 42216) map[0m
+[0;32mI (118) esp_image: segment 1: paddr=0001a510 vaddr=3fc91700 size=028a8h ( 10408) load[0m
+[0;32mI (121) esp_image: segment 2: paddr=0001cdc0 vaddr=40374000 size=03258h ( 12888) load[0m
+[0;32mI (128) esp_image: segment 3: paddr=00020020 vaddr=42000020 size=189b4h (100788) map[0m
+[0;32mI (157) esp_image: segment 4: paddr=000389dc vaddr=40377258 size=0a3b8h ( 41912) load[0m
+[0;32mI (175) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (175) boot: Disabling RNG early entropy source...[0m
+[0;32mI (186) cpu_start: Multicore app[0m
+[0;32mI (187) cpu_start: Pro cpu up.[0m
+[0;32mI (187) cpu_start: Starting app cpu, entry point is 0x403751b8[0m
+[0;32mI (0) cpu_start: App cpu up.[0m
+[0;32mI (205) cpu_start: Pro cpu start user code[0m
+[0;32mI (205) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (205) cpu_start: Application information:[0m
+[0;32mI (208) cpu_start: Project name:     blink[0m
+[0;32mI (213) cpu_start: App version:      0754270-dirty[0m
+[0;32mI (218) cpu_start: Compile time:     Feb  8 2024 14:32:10[0m
+[0;32mI (224) cpu_start: ELF file SHA256:  eaf45cf28...[0m
+[0;32mI (229) cpu_start: ESP-IDF:          v5.2-dev-1115-g3a45d4e949[0m
+[0;32mI (236) cpu_start: Min chip rev:     v0.0[0m
+[0;32mI (241) cpu_start: Max chip rev:     v0.99 [0m
+[0;32mI (246) cpu_start: Chip rev:         v0.1[0m
+[0;32mI (250) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (258) heap_init: At 3FC94818 len 00054EF8 (339 KiB): DRAM[0m
+[0;32mI (264) heap_init: At 3FCE9710 len 00005724 (21 KiB): STACK/DRAM[0m
+[0;32mI (270) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (277) heap_init: At 600FE010 len 00001FD8 (7 KiB): RTCRAM[0m
+[0;33mW (283) spi_flash: Octal flash chip is using but dio mode is selected, will automatically swich to Octal mode[0m
+[0;32mI (294) spi_flash: detected chip: mxic (opi)[0m
+[0;32mI (298) spi_flash: flash io: opi_str[0m
+[0;33mW (303) spi_flash: Detected size(32768k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (316) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (323) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (330) app_start: Starting scheduler on CPU0[0m
+[0;32mI (335) app_start: Starting scheduler on CPU1[0m
+[0;32mI (335) main_task: Started on CPU0[0m
+[0;32mI (345) main_task: Calling app_main()[0m
+[0;32mI (345) example: Example configured to blink GPIO LED![0m
+[0;32mI (355) gpio: GPIO[14]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (1365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (2365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (3365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (4365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (5365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (6365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (7365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (8365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (9365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (10365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (11365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (12365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (13365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (14365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (15365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (16365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (17365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (18365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (19365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (20365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (21365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (22365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (23365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (24365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (25365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (26365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (27365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (28365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (29365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (30365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (31365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (32365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (33365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (34365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (35365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (36365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (37365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (38365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (39365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (40365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (41365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (42365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (43365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (44365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (45365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (46365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (47365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (48365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (49365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (50365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (51365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (52365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (53365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (54365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (55365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (56365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (57365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (58365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (59365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (60365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (61365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (62365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (63365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (64365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (65365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (66365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (67365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (68365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (69365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (70365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (71365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (72365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (73365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (74365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (75365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (76365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (77365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (78365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (79365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (80365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (81365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (82365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (83365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (84365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (85365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (86365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (87365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (88365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (89365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (90365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (91365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (92365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (93365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (94365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (95365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (96365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (97365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (98365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (99365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (100365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (101365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (102365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (103365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (104365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (105365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (106365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (107365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (108365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (109365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (110365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (111365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (112365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (113365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (114365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (115365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (116365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (117365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (118365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (119365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (120365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (121365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (122365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (123365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (124365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (125365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (126365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (127365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (128365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (129365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (130365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (131365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (132365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (133365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (134365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (135365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (136365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (137365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (138365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (139365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (140365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (141365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (142365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (143365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (144365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (145365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (146365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (147365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (148365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (149365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (150365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (151365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (152365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (153365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (154365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (155365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (156365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (157365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (158365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (159365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (160365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (161365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (162365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (163365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (164365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (165365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (166365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (167365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (168365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (169365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (170365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (171365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (172365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (173365) example: Turning the LED ON![0m
+ONBlinking the LED[0;32mI (174365) example: Turning the LED OFF![0m
+OFFBlinking the LED[0;32mI (175365) example: Turning the LED ON![0m
+ONBlinking th

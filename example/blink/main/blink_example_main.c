@@ -19,7 +19,7 @@ static const char *TAG = "example";
 /* Use project configuration menu (idf.py menuconfig) to choose the GPIO to blink,
    or you can edit the following line and set a number here.
 */
-#define BLINK_GPIO CONFIG_BLINK_GPIO
+#define BLINK_GPIO 14
 
 static uint8_t s_led_state = 0;
 
@@ -29,6 +29,7 @@ static led_strip_handle_t led_strip;
 
 static void blink_led(void)
 {
+    printf("Addressable blink");
     /* If the addressable LED is enabled */
     if (s_led_state) {
         /* Set the LED pixel using RGB from 0 (0%) to 255 (100%) for each color */
@@ -61,6 +62,7 @@ static void configure_led(void)
 
 static void blink_led(void)
 {
+    printf("Blinking the LED");
     /* Set the GPIO level according to the state (LOW or HIGH)*/
     gpio_set_level(BLINK_GPIO, s_led_state);
 }
@@ -83,7 +85,9 @@ void app_main(void)
 
     while (1) {
         ESP_LOGI(TAG, "Turning the LED %s!", s_led_state == true ? "ON" : "OFF");
+        printf(s_led_state == true ? "ON" : "OFF");
         blink_led();
+        gpio_set_level(4, s_led_state);
         /* Toggle the LED state */
         s_led_state = !s_led_state;
         vTaskDelay(CONFIG_BLINK_PERIOD / portTICK_PERIOD_MS);

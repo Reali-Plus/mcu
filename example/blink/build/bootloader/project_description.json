@@ -1,7 +1,7 @@
 {
     "version":            "1",
     "project_name":       "bootloader",
-    "project_version":    "v5.2-dev-1115-g3a45d4e949",
+    "project_version":    "v5.2-dev-1115-g3a45d4e949-dirty",
     "project_path":       "/home/raesangur/esp/esp-idf/components/bootloader/subproject",
     "idf_path":           "/home/raesangur/esp/esp-idf",
     "build_dir":          "/home/raesangur/github/mcu/example/blink/build/bootloader",
@@ -11,7 +11,7 @@
     "app_elf":            "bootloader.elf",
     "app_bin":            "bootloader.bin",
     "build_type":         "flash_app",
-    "git_revision":       "v5.2-dev-1115-g3a45d4e949",
+    "git_revision":       "v5.2-dev-1115-g3a45d4e949-dirty",
     "target":             "esp32s3",
     "rev":                "",
     "min_rev":            "0",
@@ -19,7 +19,7 @@
     "phy_data_partition": "",
     "monitor_baud" :      "115200",
     "monitor_toolprefix": "xtensa-esp32s3-elf-",
-    "c_compiler":         "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/bin/xtensa-esp32s3-elf-gcc",
+    "c_compiler":         "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf-gcc/12.2.0_20230208-x86_64-unknown-linux-gnu/bin/xtensa-esp32s3-elf-gcc",
     "config_environment" : {
         "COMPONENT_KCONFIGS" : "/home/raesangur/esp/esp-idf/components/efuse/Kconfig;/home/raesangur/esp/esp-idf/components/esp_common/Kconfig;/home/raesangur/esp/esp-idf/components/esp_hw_support/Kconfig;/home/raesangur/esp/esp-idf/components/esp_system/Kconfig;/home/raesangur/esp/esp-idf/components/freertos/Kconfig;/home/raesangur/esp/esp-idf/components/hal/Kconfig;/home/raesangur/esp/esp-idf/components/log/Kconfig;/home/raesangur/esp/esp-idf/components/newlib/Kconfig;/home/raesangur/esp/esp-idf/components/soc/Kconfig;/home/raesangur/esp/esp-idf/components/spi_flash/Kconfig",
         "COMPONENT_KCONFIGS_PROJBUILD" : "/home/raesangur/esp/esp-idf/components/bootloader/Kconfig.projbuild;/home/raesangur/esp/esp-idf/components/esp_app_format/Kconfig.projbuild;/home/raesangur/esp/esp-idf/components/esp_rom/Kconfig.projbuild;/home/raesangur/esp/esp-idf/components/esptool_py/Kconfig.projbuild;/home/raesangur/esp/esp-idf/components/partition_table/Kconfig.projbuild"

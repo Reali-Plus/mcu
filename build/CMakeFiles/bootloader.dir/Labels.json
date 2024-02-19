@@ -2,34 +2,34 @@
 	"sources" : 
 	[
 		{
-			"file" : "/home/fabuliste/esp32_PMC/lcd/build/CMakeFiles/bootloader"
+			"file" : "/home/raesangur/github/mcu/build/CMakeFiles/bootloader"
 		},
 		{
-			"file" : "/home/fabuliste/esp32_PMC/lcd/build/CMakeFiles/bootloader.rule"
+			"file" : "/home/raesangur/github/mcu/build/CMakeFiles/bootloader.rule"
 		},
 		{
-			"file" : "/home/fabuliste/esp32_PMC/lcd/build/CMakeFiles/bootloader-complete.rule"
+			"file" : "/home/raesangur/github/mcu/build/CMakeFiles/bootloader-complete.rule"
 		},
 		{
-			"file" : "/home/fabuliste/esp32_PMC/lcd/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
+			"file" : "/home/raesangur/github/mcu/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
 		},
 		{
-			"file" : "/home/fabuliste/esp32_PMC/lcd/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
+			"file" : "/home/raesangur/github/mcu/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
 		},
 		{
-			"file" : "/home/fabuliste/esp32_PMC/lcd/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
+			"file" : "/home/raesangur/github/mcu/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
 		},
 		{
-			"file" : "/home/fabuliste/esp32_PMC/lcd/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
+			"file" : "/home/raesangur/github/mcu/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
 		},
 		{
-			"file" : "/home/fabuliste/esp32_PMC/lcd/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
+			"file" : "/home/raesangur/github/mcu/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
 		},
 		{
-			"file" : "/home/fabuliste/esp32_PMC/lcd/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
+			"file" : "/home/raesangur/github/mcu/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
 		},
 		{
-			"file" : "/home/fabuliste/esp32_PMC/lcd/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
+			"file" : "/home/raesangur/github/mcu/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
 		}
 	],
 	"target" : 
