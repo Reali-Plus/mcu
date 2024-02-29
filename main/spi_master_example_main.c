@@ -33,7 +33,7 @@
 #define PIN_NUM_MISO 13 // 37
 #define PIN_NUM_MOSI 11 // 35
 #define PIN_NUM_CLK 12  // 36
-#define PIN_NUM_CS 37
+#define PIN_NUM_CS 48
 
 #define PIN_NUM_DC 4
 #define PIN_NUM_RST 5
