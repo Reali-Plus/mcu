@@ -14,6 +14,11 @@
 #include <SPI.h>
 #include <ICM20948_WE.h>
 #define CS_PIN 35   // Chip Select Pin
+
+#define CS_A  21
+#define CS_B  35
+#define CS_C  36
+
 bool spi = true;
 
 #include <BLEDevice.h>
@@ -48,10 +53,11 @@ class MyCallbacks: public BLECharacteristicCallbacks {
 char message[32] = {};
 
 void setup() {
-  pinMode(21, OUTPUT);
-  pinMode(36, OUTPUT);
-  digitalWrite(21, HIGH);
-  digitalWrite(36, HIGH);
+  pinMode(CS_A, OUTPUT);
+  pinMode(CS_C, OUTPUT);
+  digitalWrite(CS_A, HIGH);
+  digitalWrite(CS_C, HIGH);
+
   Serial.begin(115200);
   while(!Serial) {}
   
