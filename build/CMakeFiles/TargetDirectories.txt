@@ -9,7 +9,7 @@
 /home/raesangur/github/mcu/build/CMakeFiles/flash.dir
 /home/raesangur/github/mcu/build/CMakeFiles/encrypted-flash.dir
 /home/raesangur/github/mcu/build/CMakeFiles/_project_elf_src.dir
-/home/raesangur/github/mcu/build/CMakeFiles/spi_master.elf.dir
+/home/raesangur/github/mcu/build/CMakeFiles/reali_plus.elf.dir
 /home/raesangur/github/mcu/build/CMakeFiles/size.dir
 /home/raesangur/github/mcu/build/CMakeFiles/size-files.dir
 /home/raesangur/github/mcu/build/CMakeFiles/size-components.dir

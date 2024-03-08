@@ -69,9 +69,11 @@ public:
     pins_t<io_t> pins;
     pins_t<bool> cfg;
 
-    chip_selector() = delete;
-    chip_selector(pins_t<io_t> pins, pins_t<bool> cfg) : pins{pins}, cfg{cfg};
+    chip_selector()                     = delete;
     chip_selector(const chip_selector&) = default;
+    chip_selector(pins_t<io_t> pins, pins_t<bool> cfg) : pins{pins}, cfg{cfg}
+    {
+    }
 
     void apply_cfg();
     void release_cfg();
@@ -80,7 +82,7 @@ public:
 template<std::size_t cs, bool ds>
 void chip_selector<cs, ds>::apply_cfg()
 {
-    for(std::size_t i = 0; i < cs_num; i++)
+    for(std::size_t i = 0; i < cs; i++)
     {
         gpio_set_level(pins[i], static_cast<std::uint32_t>(cfg[i]));
     }
@@ -89,9 +91,9 @@ void chip_selector<cs, ds>::apply_cfg()
 template<std::size_t cs, bool ds>
 void chip_selector<cs, ds>::release_cfg()
 {
-    for(std::size_t i = 0; i < cs_num; i++)
+    for(std::size_t i = 0; i < cs; i++)
     {
-        gpio_set_level(pins[i], static_cast<std::uint32_t>(default_state));
+        gpio_set_level(pins[i], static_cast<std::uint32_t>(ds));
     }
 }
 

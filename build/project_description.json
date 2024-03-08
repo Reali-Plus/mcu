@@ -1,15 +1,15 @@
 {
     "version":            "1",
-    "project_name":       "spi_master",
-    "project_version":    "0754270-dirty",
+    "project_name":       "reali_plus",
+    "project_version":    "e83877d-dirty",
     "project_path":       "/home/raesangur/github/mcu",
     "idf_path":           "/home/raesangur/esp/esp-idf",
     "build_dir":          "/home/raesangur/github/mcu/build",
     "config_file":        "/home/raesangur/github/mcu/sdkconfig",
     "config_defaults":    "",
     "bootloader_elf":     "/home/raesangur/github/mcu/build/bootloader/bootloader.elf",
-    "app_elf":            "spi_master.elf",
-    "app_bin":            "spi_master.bin",
+    "app_elf":            "reali_plus.elf",
+    "app_bin":            "reali_plus.bin",
     "build_type":         "flash_app",
     "git_revision":       "v5.2-dev-1115-g3a45d4e949-dirty",
     "target":             "esp32s3",
@@ -22,7 +22,7 @@
     "c_compiler":         "/home/raesangur/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/bin/xtensa-esp32s3-elf-gcc",
     "config_environment" : {
         "COMPONENT_KCONFIGS" : "/home/raesangur/esp/esp-idf/components/app_trace/Kconfig;/home/raesangur/esp/esp-idf/components/bt/Kconfig;/home/raesangur/esp/esp-idf/components/driver/Kconfig;/home/raesangur/esp/esp-idf/components/efuse/Kconfig;/home/raesangur/esp/esp-idf/components/esp-tls/Kconfig;/home/raesangur/esp/esp-idf/components/esp_adc/Kconfig;/home/raesangur/esp/esp-idf/components/esp_coex/Kconfig;/home/raesangur/esp/esp-idf/components/esp_common/Kconfig;/home/raesangur/esp/esp-idf/components/esp_eth/Kconfig;/home/raesangur/esp/esp-idf/components/esp_event/Kconfig;/home/raesangur/esp/esp-idf/components/esp_gdbstub/Kconfig;/home/raesangur/esp/esp-idf/components/esp_http_client/Kconfig;/home/raesangur/esp/esp-idf/components/esp_http_server/Kconfig;/home/raesangur/esp/esp-idf/components/esp_https_ota/Kconfig;/home/raesangur/esp/esp-idf/components/esp_https_server/Kconfig;/home/raesangur/esp/esp-idf/components/esp_hw_support/Kconfig;/home/raesangur/esp/esp-idf/components/esp_lcd/Kconfig;/home/raesangur/esp/esp-idf/components/esp_netif/Kconfig;/home/raesangur/esp/esp-idf/components/esp_partition/Kconfig;/home/raesangur/esp/esp-idf/components/esp_phy/Kconfig;/home/raesangur/esp/esp-idf/components/esp_pm/Kconfig;/home/raesangur/esp/esp-idf/components/esp_psram/Kconfig;/home/raesangur/esp/esp-idf/components/esp_ringbuf/Kconfig;/home/raesangur/esp/esp-idf/components/esp_system/Kconfig;/home/raesangur/esp/esp-idf/components/esp_timer/Kconfig;/home/raesangur/esp/esp-idf/components/esp_wifi/Kconfig;/home/raesangur/esp/esp-idf/components/espcoredump/Kconfig;/home/raesangur/esp/esp-idf/components/fatfs/Kconfig;/home/raesangur/esp/esp-idf/components/freertos/Kconfig;/home/raesangur/esp/esp-idf/components/hal/Kconfig;/home/raesangur/esp/esp-idf/components/heap/Kconfig;/home/raesangur/esp/esp-idf/components/ieee802154/Kconfig;/home/raesangur/esp/esp-idf/components/log/Kconfig;/home/raesangur/esp/esp-idf/components/lwip/Kconfig;/home/raesangur/esp/esp-idf/components/mbedtls/Kconfig;/home/raesangur/esp/esp-idf/components/mqtt/esp-mqtt/Kconfig;/home/raesangur/esp/esp-idf/components/newlib/Kconfig;/home/raesangur/esp/esp-idf/components/nvs_flash/Kconfig;/home/raesangur/esp/esp-idf/components/nvs_sec_provider/Kconfig;/home/raesangur/esp/esp-idf/components/openthread/Kconfig;/home/raesangur/esp/esp-idf/components/protocomm/Kconfig;/home/raesangur/esp/esp-idf/components/pthread/Kconfig;/home/raesangur/esp/esp-idf/components/soc/Kconfig;/home/raesangur/esp/esp-idf/components/spi_flash/Kconfig;/home/raesangur/esp/esp-idf/components/spiffs/Kconfig;/home/raesangur/esp/esp-idf/components/tcp_transport/Kconfig;/home/raesangur/esp/esp-idf/components/ulp/Kconfig;/home/raesangur/esp/esp-idf/components/unity/Kconfig;/home/raesangur/esp/esp-idf/components/usb/Kconfig;/home/raesangur/esp/esp-idf/components/vfs/Kconfig;/home/raesangur/esp/esp-idf/components/wear_levelling/Kconfig;/home/raesangur/esp/esp-idf/components/wifi_provisioning/Kconfig;/home/raesangur/github/mcu/managed_components/espressif__esp_jpeg/Kconfig",
-        "COMPONENT_KCONFIGS_PROJBUILD" : "/home/raesangur/esp/esp-idf/components/bootloader/Kconfig.projbuild;/home/raesangur/esp/esp-idf/components/esp_app_format/Kconfig.projbuild;/home/raesangur/esp/esp-idf/components/esp_rom/Kconfig.projbuild;/home/raesangur/esp/esp-idf/components/esptool_py/Kconfig.projbuild;/home/raesangur/esp/esp-idf/components/partition_table/Kconfig.projbuild;/home/raesangur/github/mcu/main/Kconfig.projbuild"
+        "COMPONENT_KCONFIGS_PROJBUILD" : "/home/raesangur/esp/esp-idf/components/bootloader/Kconfig.projbuild;/home/raesangur/esp/esp-idf/components/esp_app_format/Kconfig.projbuild;/home/raesangur/esp/esp-idf/components/esp_rom/Kconfig.projbuild;/home/raesangur/esp/esp-idf/components/esptool_py/Kconfig.projbuild;/home/raesangur/esp/esp-idf/components/partition_table/Kconfig.projbuild"
     },
     "common_component_reqs": [ "cxx", "newlib", "freertos", "esp_hw_support", "heap", "log", "soc", "hal", "esp_rom", "esp_common", "esp_system", "xtensa" ],
     "build_components" : [ "app_trace", "app_update", "bootloader", "bootloader_support", "bt", "cmock", "console", "cxx", "driver", "efuse", "esp-tls", "esp_adc", "esp_app_format", "esp_bootloader_format", "esp_coex", "esp_common", "esp_eth", "esp_event", "esp_gdbstub", "esp_hid", "esp_http_client", "esp_http_server", "esp_https_ota", "esp_https_server", "esp_hw_support", "esp_lcd", "esp_local_ctrl", "esp_mm", "esp_netif", "esp_netif_stack", "esp_partition", "esp_phy", "esp_pm", "esp_psram", "esp_ringbuf", "esp_rom", "esp_system", "esp_timer", "esp_wifi", "espcoredump", "espressif__esp_jpeg", "esptool_py", "fatfs", "freertos", "hal", "heap", "http_parser", "idf_test", "ieee802154", "json", "log", "lwip", "main", "mbedtls", "mqtt", "newlib", "nvs_flash", "nvs_sec_provider", "openthread", "partition_table", "perfmon", "protobuf-c", "protocomm", "pthread", "sdmmc", "soc", "spi_flash", "spiffs", "tcp_transport", "touch_element", "ulp", "unity", "usb", "vfs", "wear_levelling", "wifi_provisioning", "wpa_supplicant", "xtensa", "" ],
@@ -820,7 +820,7 @@
             "managed_reqs": [],
             "managed_priv_reqs": [ "espressif__esp_jpeg" ],
             "file": "/home/raesangur/github/mcu/build/esp-idf/main/libmain.a",
-            "sources": [ "/home/raesangur/github/mcu/main/spi_master_example_main.c" ],
+            "sources": [ "/home/raesangur/github/mcu/main/main.cpp", "/home/raesangur/github/mcu/main/icm20948.cpp" ],
             "include_dirs": [ "." ]
         },
         "mbedtls": {

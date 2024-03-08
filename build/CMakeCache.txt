@@ -210,7 +210,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=spi_master
+CMAKE_PROJECT_NAME:STATIC=reali_plus
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/home/raesangur/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/bin/xtensa-esp32s3-elf-ranlib
@@ -354,6 +354,15 @@ mbedtls_LIB_DEPENDS:STATIC=general;__idf_cxx;general;__idf_newlib;general;__idf_
 
 //Dependencies for the target
 mbedx509_LIB_DEPENDS:STATIC=general;__idf_cxx;general;__idf_newlib;general;__idf_freertos;general;__idf_esp_hw_support;general;__idf_heap;general;__idf_log;general;__idf_soc;general;__idf_hal;general;__idf_esp_rom;general;__idf_esp_common;general;__idf_esp_system;general;__idf_xtensa;general;mbedcrypto;
+
+//Value Computed by CMake
+reali_plus_BINARY_DIR:STATIC=/home/raesangur/github/mcu/build
+
+//Value Computed by CMake
+reali_plus_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+reali_plus_SOURCE_DIR:STATIC=/home/raesangur/github/mcu
 
 //Value Computed by CMake
 spi_master_BINARY_DIR:STATIC=/home/raesangur/github/mcu/build

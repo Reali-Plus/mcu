@@ -82,8 +82,8 @@
 class icm20948
 {
 public:
-    chip_selector<>     cs;
     spi_device_handle_t spi;
+    chip_selector<>     cs;
 
     icm20948()                 = delete;
     icm20948(const icm20948&)  = delete;
