@@ -306,6 +306,17 @@ void icm20948::reset()
 }
 
 
+vec3<> icm20948::correct_acc_raw_values(vec3<> accRawVal)
+{
+    return (accRawVal - (accOffsetVal / accRangeFactor)) / accCorrFactor;
+}
+
+vec3<> icm20948::correct_gyr_raw_values(vec3<> gyrRawVal)
+{
+    return gyrRawVal - (gyrOffsetVal / gyrRangeFactor);
+}
+
+
 
 /**
  * ------------------------------------------------------------------------------------------------

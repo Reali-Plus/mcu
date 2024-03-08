@@ -42,6 +42,12 @@
  *      - Adding edge cases to angle function
  *      - Added distance and lerp functions
  *      - Moved comparison lambda in its own function
+ *
+ * @version 0.3
+ * 2024-03-08 - Raesangur
+ *      - Added `operator+` and `operator-` for scalar values
+ *      - Added `operator*` and `operator/` for vectors
+ *      - Fixed possible edge case for unsigned `<T>` types
  * ===============================================================================================
  */
 #ifndef VEC3_H
@@ -74,28 +80,32 @@ public:
     constexpr vec3(const vec3&) = default;
     constexpr vec3(T x, T y, T z);
 
-    constexpr T       dot(const vec3<T>& rh) const;
-    constexpr vec3<T> cross(const vec3<T>& rh) const;
+    constexpr T       dot(const vec3<T>& b) const;
+    constexpr vec3<T> cross(const vec3<T>& b) const;
 
     constexpr T        magnitude() const;
     constexpr vec3<T>& normalize();
-    constexpr vec3<T>  lerp(const vec3<T>& rh, T t) const;
+    constexpr vec3<T>  lerp(const vec3<T>& b, T t) const;
 
-    constexpr T angle(const vec3<T>& rh) const;
-    constexpr T distance(const vec3<T>& rh) const;
+    constexpr T angle(const vec3<T>& b) const;
+    constexpr T distance(const vec3<T>& b) const;
 
     void print(std::ostream& os = std::cout) const;
 
-    constexpr inline bool operator==(const vec3<T>& rh) const;
-    constexpr inline bool operator!=(const vec3<T>& rh) const;
+    constexpr inline bool operator==(const vec3<T>& b) const;
+    constexpr inline bool operator!=(const vec3<T>& b) const;
 
     constexpr inline vec3<T>  operator-() const;
-    constexpr inline vec3<T>  operator+(const vec3<T>& rh) const;
-    constexpr inline vec3<T>  operator-(const vec3<T>& rh) const;
+    constexpr inline vec3<T>  operator+(T scalar) const;
+    constexpr inline vec3<T>  operator-(T scalar) const;
     constexpr inline vec3<T>  operator*(T scalar) const;
     constexpr inline vec3<T>  operator/(T scalar) const;
-    constexpr inline vec3<T>& operator+=(const vec3<T>& rh);
-    constexpr inline vec3<T>& operator-=(const vec3<T>& rh);
+    constexpr inline vec3<T>  operator+(const vec3<T>& b) const;
+    constexpr inline vec3<T>  operator-(const vec3<T>& b) const;
+    constexpr inline vec3<T>  operator*(const vec3<T>& b) const;
+    constexpr inline vec3<T>  operator/(const vec3<T>& b) const;
+    constexpr inline vec3<T>& operator+=(const vec3<T>& b);
+    constexpr inline vec3<T>& operator-=(const vec3<T>& b);
     constexpr inline vec3<T>& operator*=(T scalar);
     constexpr inline vec3<T>& operator/=(T scalar);
 
@@ -127,9 +137,9 @@ constexpr vec3<T>::vec3(T x, T y, T z) : x{x}, y{y}, z{z}
  * @brief Calculate the dot product of two vectors.
  */
 template<typename T>
-constexpr T vec3<T>::dot(const vec3<T>& rh) const
+constexpr T vec3<T>::dot(const vec3<T>& b) const
 {
-    return x * rh.x + y * rh.y + z * rh.z;
+    return x * b.x + y * b.y + z * b.z;
 }
 
 /**
@@ -138,9 +148,9 @@ constexpr T vec3<T>::dot(const vec3<T>& rh) const
  * @return Resulting vector from the cross product.
  */
 template<typename T>
-constexpr vec3<T> vec3<T>::cross(const vec3<T>& rh) const
+constexpr vec3<T> vec3<T>::cross(const vec3<T>& b) const
 {
-    return vec3{y * rh.z - rh.y * z, x * rh.z - rh.x * z, x * rh.y - rh.x * y};
+    return vec3{y * b.z - b.y * z, x * b.z - b.x * z, x * b.y - b.x * y};
 }
 
 
@@ -171,13 +181,13 @@ constexpr vec3<T>& vec3<T>::normalize()
 /**
  * @brief Calculate the linear interpolation between two vectors.
  *        A `t` step of `0` means 100% of the resulting vector is from the original vector.
- *        A `t` step of `1` means 100% of the resulting vector is from the `rh` vector.
+ *        A `t` step of `1` means 100% of the resulting vector is from the `b` vector.
  *        A `t` inbetween means the resulting vector is somewhere in between.
  */
 template<typename T>
-constexpr vec3<T> vec3<T>::lerp(const vec3<T>& rh, T t) const
+constexpr vec3<T> vec3<T>::lerp(const vec3<T>& b, T t) const
 {
-    return *this + (rh - *this) * t;
+    return *this + (b - *this) * t;
 }
 
 
@@ -188,9 +198,9 @@ constexpr vec3<T> vec3<T>::lerp(const vec3<T>& rh, T t) const
  * @return Angle in radian between the vectors.
  */
 template<typename T>
-constexpr T vec3<T>::angle(const vec3<T>& rh) const
+constexpr T vec3<T>::angle(const vec3<T>& b) const
 {
-    T dotProduct = std::max(std::min(dot(rh), static_cast<T>(1.0)), static_cast<T>(-1.0));
+    T dotProduct = std::max(std::min(dot(b), static_cast<T>(1.0)), static_cast<T>(-1.0));
     if(comp(dotProduct, static_cast<T>(1.0)))
     {
         return static_cast<T>(0.0);        // Parallel vectors;
@@ -199,7 +209,7 @@ constexpr T vec3<T>::angle(const vec3<T>& rh) const
     {
         return static_cast<T>(std::numbers::pi);        // Opposite vectors;
     }
-    return std::acos(dotProduct / (magnitude() * rh.magnitude()));
+    return std::acos(dotProduct / (magnitude() * b.magnitude()));
 }
 
 /**
@@ -209,11 +219,11 @@ constexpr T vec3<T>::angle(const vec3<T>& rh) const
  *          calculates the magnitude of this temporary vector.
  */
 template<typename T>
-constexpr T vec3<T>::distance(const vec3<T>& rh) const
+constexpr T vec3<T>::distance(const vec3<T>& b) const
 {
-    T dx = x - rh.x;
-    T dy = y - rh.y;
-    T dz = z - rh.z;
+    T dx = x - b.x;
+    T dy = y - b.y;
+    T dz = z - b.z;
 
     vec3<T> dV{dx, dy, dz};
 
@@ -248,9 +258,9 @@ void vec3<T>::print(std::ostream& os) const
  *          It is possible for this function to give false negatives.
  */
 template<typename T>
-constexpr inline bool vec3<T>::operator==(const vec3<T>& rh) const
+constexpr inline bool vec3<T>::operator==(const vec3<T>& b) const
 {
-    return comp(x, rh.x) && comp(y, rh.y) && comp(z, rh.z);
+    return comp(x, b.x) && comp(y, b.y) && comp(z, b.z);
 }
 
 /**
@@ -259,9 +269,9 @@ constexpr inline bool vec3<T>::operator==(const vec3<T>& rh) const
  * @warning The same warnings apply to this method than to the `operator==` method.
  */
 template<typename T>
-constexpr inline bool vec3<T>::operator!=(const vec3<T>& rh) const
+constexpr inline bool vec3<T>::operator!=(const vec3<T>& b) const
 {
-    return !(*this == rh);
+    return !(*this == b);
 }
 
 
@@ -275,25 +285,22 @@ constexpr inline vec3<T> vec3<T>::operator-() const
 }
 
 /**
- * @brief Add a vector to the current vector.
+ * @brief Add a scalar value to every value in the vector.
  */
 template<typename T>
-constexpr inline vec3<T> vec3<T>::operator+(const vec3<T>& rh) const
+constexpr inline vec3<T> vec3<T>::operator+(T scalar) const
 {
-    return vec3{x + rh.x, y + rh.y, z + rh.z};
+    return vec3{x + scalar, y + scalar, z + scalar};
 }
 
 /**
- * @brief Substract a vector to the current vector.
- *
- * @details This uses `operator+` with the inversion operator `operator-()`.
+ * @brief Substract a scalar value from every value in the vector.
  */
 template<typename T>
-constexpr inline vec3<T> vec3<T>::operator-(const vec3<T>& rh) const
+constexpr inline vec3<T> vec3<T>::operator-(T scalar) const
 {
-    return operator+(-rh);
+    return vec3{x - scalar, y - scalar, z - scalar};
 }
-
 
 /**
  * @brief Scale a vector with a specified scalar.
@@ -315,14 +322,51 @@ constexpr inline vec3<T> vec3<T>::operator/(T const scalar) const
 
 
 /**
+ * @brief Add a vector to the current vector.
+ */
+template<typename T>
+constexpr inline vec3<T> vec3<T>::operator+(const vec3<T>& b) const
+{
+    return vec3{x + b.x, y + b.y, z + b.z};
+}
+
+/**
+ * @brief Substract a vector to the current vector.
+ */
+template<typename T>
+constexpr inline vec3<T> vec3<T>::operator-(const vec3<T>& b) const
+{
+    return vec3{x - b.x, y - b.y, z - b.z};
+}
+
+/**
+ * @brief Multiply a vector with the current vector.
+ */
+template<typename T>
+constexpr inline vec3<T> vec3<T>::operator*(const vec3<T>& b) const
+{
+    return vec3{x * b.x, y * b.y, z * b.z};
+}
+
+/**
+ * @brief Divine the current vector with a vector.
+ */
+template<typename T>
+constexpr inline vec3<T> vec3<T>::operator/(const vec3<T>& b) const
+{
+    return vec3{x / b.x, y / b.y, z / b.z};
+}
+
+
+/**
  * @brief Add two vectors together.
  */
 template<typename T>
-constexpr inline vec3<T>& vec3<T>::operator+=(vec3<T> const& rh)
+constexpr inline vec3<T>& vec3<T>::operator+=(vec3<T> const& b)
 {
-    x += rh.x;
-    y += rh.y;
-    z += rh.z;
+    x += b.x;
+    y += b.y;
+    z += b.z;
     return *this;
 }
 
@@ -330,11 +374,11 @@ constexpr inline vec3<T>& vec3<T>::operator+=(vec3<T> const& rh)
  * @brief Substract two vectors.
  */
 template<typename T>
-constexpr inline vec3<T>& vec3<T>::operator-=(vec3<T> const& rh)
+constexpr inline vec3<T>& vec3<T>::operator-=(vec3<T> const& b)
 {
-    x -= rh.x;
-    y -= rh.y;
-    z -= rh.z;
+    x -= b.x;
+    y -= b.y;
+    z -= b.z;
     return *this;
 }
 

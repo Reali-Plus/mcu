@@ -192,6 +192,12 @@ protected:
 
     std::uint8_t currentBank;
 
+    vec3<>       accOffsetVal;
+    vec3<>       gyrOffsetVal;
+    std::uint8_t accRangeFactor;
+    std::uint8_t gyrRangeFactor;
+    float        accCorrFactor;
+
 
 private:
     using arr1 = std::array<std::uint8_t, 1U>;
