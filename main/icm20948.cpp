@@ -60,13 +60,16 @@
  */
 #include "icm20948.h"
 
+#include "freertos/task.h"
+
 #include <cstdint>
 
-namespace ICM20948
-{
+
 /** ===============================================================================================
  *  CONSTANTS
  */
+namespace ICM20948
+{
 
 
 static constexpr TickType_t PERIOD_MS{10};
@@ -77,124 +80,124 @@ static constexpr TickType_t READ_DELAY{10 / PERIOD_MS};
 static constexpr std::uint8_t AK09916_ADDRESS{0x0C};
 
 /* Registers ICM20948 USER BANK 0*/
-static constexpr std::uint8_t WHO_AM_I{0x00};
-static constexpr std::uint8_t USER_CTRL{0x03};
-static constexpr std::uint8_t LP_CONFIG{0x05};
-static constexpr std::uint8_t PWR_MGMT_1{0x06};
-static constexpr std::uint8_t PWR_MGMT_2{0x07};
-static constexpr std::uint8_t INT_PIN_CFG{0x0F};
-static constexpr std::uint8_t INT_ENABLE{0x10};
-static constexpr std::uint8_t INT_ENABLE_1{0x11};
-static constexpr std::uint8_t INT_ENABLE_2{0x12};
-static constexpr std::uint8_t INT_ENABLE_3{0x13};
-static constexpr std::uint8_t I2C_MST_STATUS{0x17};
-static constexpr std::uint8_t INT_STATUS{0x19};
-static constexpr std::uint8_t INT_STATUS_1{0x1A};
-static constexpr std::uint8_t INT_STATUS_2{0x1B};
-static constexpr std::uint8_t INT_STATUS_3{0x1C};
-static constexpr std::uint8_t DELAY_TIME_H{0x28};
-static constexpr std::uint8_t DELAY_TIME_L{0x29};
-static constexpr std::uint8_t ACCEL_OUT{0x2D};        // accel data registers begin
-static constexpr std::uint8_t GYRO_OUT{0x33};         // gyro data registers begin
-static constexpr std::uint8_t TEMP_OUT{0x39};
-static constexpr std::uint8_t EXT_SLV_SENS_DATA_00{0x3B};
-static constexpr std::uint8_t EXT_SLV_SENS_DATA_01{0x3C};
-static constexpr std::uint8_t FIFO_EN_1{0x66};
-static constexpr std::uint8_t FIFO_EN_2{0x67};
-static constexpr std::uint8_t FIFO_RST{0x68};
-static constexpr std::uint8_t FIFO_MODE{0x69};
-static constexpr std::uint8_t FIFO_COUNT{0x70};
-static constexpr std::uint8_t FIFO_R_W{0x72};
-static constexpr std::uint8_t DATA_RDY_STATUS{0x74};
-static constexpr std::uint8_t FIFO_CFG{0x76};
+static constexpr std::uint8_t WHO_AM_I{0x00U};
+static constexpr std::uint8_t USER_CTRL{0x03U};
+static constexpr std::uint8_t LP_CONFIG{0x05U};
+static constexpr std::uint8_t PWR_MGMT_1{0x06U};
+static constexpr std::uint8_t PWR_MGMT_2{0x07U};
+static constexpr std::uint8_t INT_PIN_CFG{0x0FU};
+static constexpr std::uint8_t INT_ENABLE{0x10U};
+static constexpr std::uint8_t INT_ENABLE_1{0x11U};
+static constexpr std::uint8_t INT_ENABLE_2{0x12U};
+static constexpr std::uint8_t INT_ENABLE_3{0x13U};
+static constexpr std::uint8_t I2C_MST_STATUS{0x17U};
+static constexpr std::uint8_t INT_STATUS{0x19U};
+static constexpr std::uint8_t INT_STATUS_1{0x1AU};
+static constexpr std::uint8_t INT_STATUS_2{0x1BU};
+static constexpr std::uint8_t INT_STATUS_3{0x1CU};
+static constexpr std::uint8_t DELAY_TIME_H{0x28U};
+static constexpr std::uint8_t DELAY_TIME_L{0x29U};
+static constexpr std::uint8_t ACCEL_OUT{0x2DU};        // accel data registers begin
+static constexpr std::uint8_t GYRO_OUT{0x33U};         // gyro data registers begin
+static constexpr std::uint8_t TEMP_OUT{0x39U};
+static constexpr std::uint8_t EXT_SLV_SENS_DATA_00{0x3BU};
+static constexpr std::uint8_t EXT_SLV_SENS_DATA_01{0x3CU};
+static constexpr std::uint8_t FIFO_EN_1{0x66U};
+static constexpr std::uint8_t FIFO_EN_2{0x67U};
+static constexpr std::uint8_t FIFO_RST{0x68U};
+static constexpr std::uint8_t FIFO_MODE{0x69U};
+static constexpr std::uint8_t FIFO_COUNT{0x70U};
+static constexpr std::uint8_t FIFO_R_W{0x72U};
+static constexpr std::uint8_t DATA_RDY_STATUS{0x74U};
+static constexpr std::uint8_t FIFO_CFG{0x76U};
 
 /* Registers ICM20948 USER BANK 1*/
-static constexpr std::uint8_t SELF_TEST_X_GYRO{0x02};
-static constexpr std::uint8_t SELF_TEST_Y_GYRO{0x03};
-static constexpr std::uint8_t SELF_TEST_Z_GYRO{0x04};
-static constexpr std::uint8_t SELF_TEST_X_ACCEL{0x0E};
-static constexpr std::uint8_t SELF_TEST_Y_ACCEL{0x0F};
-static constexpr std::uint8_t SELF_TEST_Z_ACCEL{0x10};
-static constexpr std::uint8_t XA_OFFS_H{0x14};
-static constexpr std::uint8_t XA_OFFS_L{0x15};
-static constexpr std::uint8_t YA_OFFS_H{0x17};
-static constexpr std::uint8_t YA_OFFS_L{0x18};
-static constexpr std::uint8_t ZA_OFFS_H{0x1A};
-static constexpr std::uint8_t ZA_OFFS_L{0x1B};
-static constexpr std::uint8_t TIMEBASE_CORR_PLL{0x28};
+static constexpr std::uint8_t SELF_TEST_X_GYRO{0x02U};
+static constexpr std::uint8_t SELF_TEST_Y_GYRO{0x03U};
+static constexpr std::uint8_t SELF_TEST_Z_GYRO{0x04U};
+static constexpr std::uint8_t SELF_TEST_X_ACCEL{0x0EU};
+static constexpr std::uint8_t SELF_TEST_Y_ACCEL{0x0FU};
+static constexpr std::uint8_t SELF_TEST_Z_ACCEL{0x10U};
+static constexpr std::uint8_t XA_OFFS_H{0x14U};
+static constexpr std::uint8_t XA_OFFS_L{0x15U};
+static constexpr std::uint8_t YA_OFFS_H{0x17U};
+static constexpr std::uint8_t YA_OFFS_L{0x18U};
+static constexpr std::uint8_t ZA_OFFS_H{0x1AU};
+static constexpr std::uint8_t ZA_OFFS_L{0x1BU};
+static constexpr std::uint8_t TIMEBASE_CORR_PLL{0x28U};
 
 /* Registers ICM20948 USER BANK 2*/
-static constexpr std::uint8_t GYRO_SMPLRT_DIV{0x00};
-static constexpr std::uint8_t GYRO_CONFIG_1{0x01};
-static constexpr std::uint8_t GYRO_CONFIG_2{0x02};
-static constexpr std::uint8_t XG_OFFS_USRH{0x03};
-static constexpr std::uint8_t XG_OFFS_USRL{0x04};
-static constexpr std::uint8_t YG_OFFS_USRH{0x05};
-static constexpr std::uint8_t YG_OFFS_USRL{0x06};
-static constexpr std::uint8_t ZG_OFFS_USRH{0x07};
-static constexpr std::uint8_t ZG_OFFS_USRL{0x08};
-static constexpr std::uint8_t ODR_ALIGN_EN{0x09};
-static constexpr std::uint8_t ACCEL_SMPLRT_DIV_1{0x10};
-static constexpr std::uint8_t ACCEL_SMPLRT_DIV_2{0x11};
-static constexpr std::uint8_t ACCEL_INTEL_CTRL{0x12};
-static constexpr std::uint8_t ACCEL_WOM_THR{0x13};
-static constexpr std::uint8_t ACCEL_CONFIG{0x14};
-static constexpr std::uint8_t ACCEL_CONFIG_2{0x15};
-static constexpr std::uint8_t FSYNC_CONFIG{0x52};
-static constexpr std::uint8_t TEMP_CONFIG{0x53};
-static constexpr std::uint8_t MOD_CTRL_USR{0x54};
+static constexpr std::uint8_t GYRO_SMPLRT_DIV{0x00U};
+static constexpr std::uint8_t GYRO_CONFIG_1{0x01U};
+static constexpr std::uint8_t GYRO_CONFIG_2{0x02U};
+static constexpr std::uint8_t XG_OFFS_USRH{0x03U};
+static constexpr std::uint8_t XG_OFFS_USRL{0x04U};
+static constexpr std::uint8_t YG_OFFS_USRH{0x05U};
+static constexpr std::uint8_t YG_OFFS_USRL{0x06U};
+static constexpr std::uint8_t ZG_OFFS_USRH{0x07U};
+static constexpr std::uint8_t ZG_OFFS_USRL{0x08U};
+static constexpr std::uint8_t ODR_ALIGN_EN{0x09U};
+static constexpr std::uint8_t ACCEL_SMPLRT_DIV_1{0x10U};
+static constexpr std::uint8_t ACCEL_SMPLRT_DIV_2{0x11U};
+static constexpr std::uint8_t ACCEL_INTEL_CTRL{0x12U};
+static constexpr std::uint8_t ACCEL_WOM_THR{0x13U};
+static constexpr std::uint8_t ACCEL_CONFIG{0x14U};
+static constexpr std::uint8_t ACCEL_CONFIG_2{0x15U};
+static constexpr std::uint8_t FSYNC_CONFIG{0x52U};
+static constexpr std::uint8_t TEMP_CONFIG{0x53U};
+static constexpr std::uint8_t MOD_CTRL_USR{0x54U};
 
 /* Registers ICM20948 USER BANK 3*/
-static constexpr std::uint8_t I2C_MST_ODR_CFG{0x00};
-static constexpr std::uint8_t I2C_MST_CTRL{0x01};
-static constexpr std::uint8_t I2C_MST_DELAY_CTRL{0x02};
-static constexpr std::uint8_t I2C_SLV0_ADDR{0x03};
-static constexpr std::uint8_t I2C_SLV0_REG{0x04};
-static constexpr std::uint8_t I2C_SLV0_CTRL{0x05};
-static constexpr std::uint8_t I2C_SLV0_DO{0x06};
+static constexpr std::uint8_t I2C_MST_ODR_CFG{0x00U};
+static constexpr std::uint8_t I2C_MST_CTRL{0x01U};
+static constexpr std::uint8_t I2C_MST_DELAY_CTRL{0x02U};
+static constexpr std::uint8_t I2C_SLV0_ADDR{0x03U};
+static constexpr std::uint8_t I2C_SLV0_REG{0x04U};
+static constexpr std::uint8_t I2C_SLV0_CTRL{0x05U};
+static constexpr std::uint8_t I2C_SLV0_DO{0x06U};
 
 /* Registers ICM20948 ALL BANKS */
-static constexpr std::uint8_t REG_BANK_SEL{0x7F};
+static constexpr std::uint8_t REG_BANK_SEL{0x7FU};
 
 /* Registers AK09916 */
-static constexpr std::uint8_t AK09916_WIA_1{0x00};        // Who I am, Company ID
-static constexpr std::uint8_t AK09916_WIA_2{0x01};        // Who I am, Device ID
-static constexpr std::uint8_t AK09916_STATUS_1{0x10};
-static constexpr std::uint8_t AK09916_HXL{0x11};
-static constexpr std::uint8_t AK09916_HXH{0x12};
-static constexpr std::uint8_t AK09916_HYL{0x13};
-static constexpr std::uint8_t AK09916_HYH{0x14};
-static constexpr std::uint8_t AK09916_HZL{0x15};
-static constexpr std::uint8_t AK09916_HZH{0x16};
-static constexpr std::uint8_t AK09916_STATUS_2{0x18};
-static constexpr std::uint8_t AK09916_CNTL_2{0x31};
-static constexpr std::uint8_t AK09916_CNTL_3{0x32};
+static constexpr std::uint8_t AK09916_WIA_1{0x00U};        // Who I am, Company ID
+static constexpr std::uint8_t AK09916_WIA_2{0x01U};        // Who I am, Device ID
+static constexpr std::uint8_t AK09916_STATUS_1{0x10U};
+static constexpr std::uint8_t AK09916_HXL{0x11U};
+static constexpr std::uint8_t AK09916_HXH{0x12U};
+static constexpr std::uint8_t AK09916_HYL{0x13U};
+static constexpr std::uint8_t AK09916_HYH{0x14U};
+static constexpr std::uint8_t AK09916_HZL{0x15U};
+static constexpr std::uint8_t AK09916_HZH{0x16U};
+static constexpr std::uint8_t AK09916_STATUS_2{0x18U};
+static constexpr std::uint8_t AK09916_CNTL_2{0x31U};
+static constexpr std::uint8_t AK09916_CNTL_3{0x32U};
 
 /* Register Bits */
-static constexpr std::uint8_t RESET{0x80};
-static constexpr std::uint8_t I2C_MST_EN{0x20};
-static constexpr std::uint8_t SLEEP{0x40};
-static constexpr std::uint8_t LP_EN{0x20};
-static constexpr std::uint8_t BYPASS_EN{0x02};
-static constexpr std::uint8_t GYR_EN{0x07};
-static constexpr std::uint8_t ACC_EN{0x38};
-static constexpr std::uint8_t FIFO_EN{0x40};
-static constexpr std::uint8_t INT1_ACTL{0x80};
-static constexpr std::uint8_t INT_1_LATCH_EN{0x20};
-static constexpr std::uint8_t ACTL_FSYNC{0x08};
-static constexpr std::uint8_t INT_ANYRD_2CLEAR{0x10};
-static constexpr std::uint8_t FSYNC_INT_MODE_EN{0x06};
-static constexpr std::uint8_t AK09916_16_BIT{0x10};
-static constexpr std::uint8_t AK09916_OVF{0x08};
-static constexpr std::uint8_t AK09916_READ{0x80};
+static constexpr std::uint8_t RESET{0x80U};
+static constexpr std::uint8_t I2C_MST_EN{0x20U};
+static constexpr std::uint8_t SLEEP{0x40U};
+static constexpr std::uint8_t LP_EN{0x20U};
+static constexpr std::uint8_t BYPASS_EN{0x02U};
+static constexpr std::uint8_t GYR_EN{0x07U};
+static constexpr std::uint8_t ACC_EN{0x38U};
+static constexpr std::uint8_t FIFO_EN{0x40U};
+static constexpr std::uint8_t INT1_ACTL{0x80U};
+static constexpr std::uint8_t INT_1_LATCH_EN{0x20U};
+static constexpr std::uint8_t ACTL_FSYNC{0x08U};
+static constexpr std::uint8_t INT_ANYRD_2CLEAR{0x10U};
+static constexpr std::uint8_t FSYNC_INT_MODE_EN{0x06U};
+static constexpr std::uint8_t AK09916_16_BIT{0x10U};
+static constexpr std::uint8_t AK09916_OVF{0x08U};
+static constexpr std::uint8_t AK09916_READ{0x80U};
 
 /* Others */
-static constexpr std::uint16_t AK09916_WHO_AM_I_1{0x4809};
-static constexpr std::uint16_t AK09916_WHO_AM_I_2{0x0948};
-static constexpr std::uint8_t  WHO_AM_I_CONTENT{0xEA};
-static constexpr float         ROOM_TEMP_OFFSET{0.0};
-static constexpr float         T_SENSITIVITY{333.87};
-static constexpr float         AK09916_MAG_LSB{0.1495};
+static constexpr std::uint16_t AK09916_WHO_AM_I_1{0x4809U};
+static constexpr std::uint16_t AK09916_WHO_AM_I_2{0x0948U};
+static constexpr std::uint8_t  WHO_AM_I_CONTENT{0xEAU};
+static constexpr float         ROOM_TEMP_OFFSET{0.0f};
+static constexpr float         T_SENSITIVITY{333.87f};
+static constexpr float         AK09916_MAG_LSB{0.1495f};
 
 }        // namespace ICM20948
 
@@ -212,9 +215,94 @@ icm20948::icm20948(spi_device_handle_t spi, const chip_selector<>& cs) : spi{spi
 /** ===============================================================================================
  *  PROTECTED METHOD DEFINITIONS
  */
+
+template<std::size_t N>
+std::array<std::uint8_t, N> icm20948::spi_write(const std::array<std::uint8_t, N> data)
+{
+    std::array<std::uint8_t, N> receptionData = {0U};
+
+    spi_transaction_t t = {};
+    t.length            = data.size();
+    t.tx_buffer         = data.begin();
+    t.rx_buffer         = &receptionData;
+    t.user              = nullptr;
+
+    cs.apply_cfg();
+    esp_err_t ret = spi_device_polling_transmit(spi, &t);
+    cs.release_cfg();
+    assert(ret == ESP_OK);
+
+    return receptionData;
+}
+
+template<std::size_t N, std::uint8_t reg>
+std::array<std::uint8_t, N> icm20948::spi_read()
+{
+    /* Create an empty array of N values at compile-time. */
+    constexpr std::array<std::uint8_t, N> dummy = []() constexpr
+    {
+        std::array<std::uint8_t, N> a;
+        for(std::size_t i = 0U; i < N; i++)
+        {
+            a[i] = 0U;
+        }
+        a[0U] = reg;
+        return a;
+    }
+    ();
+
+    return spi_write(dummy);
+}
+
+
+void icm20948::switch_bank(std::uint8_t newBank)
+{
+    /* Check current bank, don't switch if already in the right bank. */
+    if(newBank == currentBank)
+    {
+        return;
+    }
+    currentBank = newBank;
+
+    spi_write(arr2{ICM20948::REG_BANK_SEL, static_cast<std::uint8_t>(currentBank << 4U)});
+}
+
+void icm20948::write_ak09916_register8(std::uint8_t reg, std::uint8_t val)
+{
+    switch_bank(3U);
+    spi_write(arr2{ICM20948::I2C_SLV0_ADDR, ICM20948::AK09916_ADDRESS});
+    spi_write(arr2{ICM20948::I2C_SLV0_REG, reg});
+    spi_write(arr2{ICM20948::I2C_SLV0_DO, val});
+}
+
+std::uint8_t icm20948::read_ak09916_register8(std::uint8_t reg)
+{
+    switch_bank(0U);
+    enable_mag_data_read(reg, 0x01U);
+    enable_mag_data_read(AK09916_HXL, 0x08U);
+
+    std::uint8_t val = spi_read<1U, ICM20948::EXT_SLV_SENS_DATA_00>()[0U];
+    return val;
+}
+
+std::int16_t icm20948::read_ak09916_register16(std::uint8_t reg)
+{
+    switch_bank(0U);
+    enable_mag_data_read(reg, 0x02U);
+    auto regValue = spi_read<2U, ICM20948::EXT_SLV_SENS_DATA_00>();
+    enable_mag_data_read(ICM20948::AK09916_HXL, 0x08U);
+
+    std::int16_t ret = regValue[1U] << 8U | regValue[0U];
+    return ret;
+}
+
+
 void icm20948::reset()
 {
-    write_register8(0, PWR_MGMT_1, RESET);
+    switch_bank(0U);
+    spi_write(arr2{PWR_MGMT_1, RESET});
+
+    vTaskDelay(ICM20948::RESET_DELAY);
 }
 
 

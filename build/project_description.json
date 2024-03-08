@@ -1,7 +1,7 @@
 {
     "version":            "1",
     "project_name":       "reali_plus",
-    "project_version":    "e83877d-dirty",
+    "project_version":    "425b302-dirty",
     "project_path":       "/home/raesangur/github/mcu",
     "idf_path":           "/home/raesangur/esp/esp-idf",
     "build_dir":          "/home/raesangur/github/mcu/build",

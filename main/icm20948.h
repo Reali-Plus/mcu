@@ -82,9 +82,6 @@
 class icm20948
 {
 public:
-    spi_device_handle_t spi;
-    chip_selector<>     cs;
-
     icm20948()                 = delete;
     icm20948(const icm20948&)  = delete;
     icm20948(const icm20948&&) = delete;
@@ -165,6 +162,19 @@ public:
 
 
 protected:
+    template<std::size_t N>
+    std::array<std::uint8_t, N> spi_write(const std::array<std::uint8_t, N> data);
+
+    template<std::size_t N, std::uint8_t reg>
+    std::array<std::uint8_t, N> spi_read();
+
+    void switch_bank(std::uint8_t newBank);
+
+
+    void         write_ak09916_register8(std::uint8_t reg, std::uint8_t val);
+    std::uint8_t read_ak09916_register8(std::uint8_t reg);
+    std::int16_t read_ak09916_register16(std::uint8_t reg);
+
     void reset();
 
     vec3<> correct_acc_raw_values(vec3<> accRawVal);
@@ -173,17 +183,19 @@ protected:
     vec3<> read_xyz_val_from_fifo();
     void   enable_mag_data_read(std::uint8_t reg, std::uint8_t bytes);
 
-    void         set_clock_to_auto_select();
-    void         switch_bank(std::uint8_t newBank);
-    void         write_register8(std::uint8_t bank, std::uint8_t reg, std::uint8_t val);
-    void         write_register16(std::uint8_t bank, std::uint8_t reg, std::int16_t val);
-    std::uint8_t read_register8(std::uint8_t bank, std::uint8_t reg);
-    std::int16_t read_register16(std::uint8_t bank, std::uint8_t reg);
-    void         read_all_data(std::uint8_t* data);
+    void set_clock_to_auto_select();
 
-    void         write_ak09916_register8(std::uint8_t reg, std::uint8_t val);
-    std::uint8_t read_ak09916_register8(std::uint8_t reg);
-    std::int16_t read_ak09916_register16(std::uint8_t reg);
+
+protected:
+    spi_device_handle_t spi;
+    chip_selector<>     cs;
+
+    std::uint8_t currentBank;
+
+
+private:
+    using arr1 = std::array<std::uint8_t, 1U>;
+    using arr2 = std::array<std::uint8_t, 2U>;
 };
 
 

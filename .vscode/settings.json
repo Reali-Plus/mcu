@@ -8,6 +8,9 @@
     ],
     "idf.flashType": "UART",
     "files.associations": {
-        "spi_master.h": "c"
+        "spi_master.h": "c",
+        "array": "cpp",
+        "string": "cpp",
+        "string_view": "cpp"
     }
 }
