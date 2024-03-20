@@ -150,9 +150,9 @@ public:
     void stop_fifo();
     void reset_fifo();
 
-    std::int16_t get_fifo_count();
-    std::int16_t get_number_of_fifo_data_sets();
-    void         find_fifo_begin();
+    std::uint16_t get_fifo_count();
+    std::uint16_t get_number_of_fifo_data_sets();
+    void          find_fifo_begin();
 
     /* ------------ MAGNETOMETER ------------- */
     bool          init_magnetometer();
@@ -201,6 +201,8 @@ protected:
     std::uint8_t accRangeFactor;
     std::uint8_t gyrRangeFactor;
     float        accCorrFactor;
+
+    Fifo_Type fifoType;
 
 
 private:

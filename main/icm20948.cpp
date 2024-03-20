@@ -214,37 +214,111 @@ icm20948::icm20948(spi_device_handle_t spi, const chip_selector<>& cs) : spi{spi
 
 
 /* ---------------- FIFO ----------------- */
+
 void icm20948::enable_fifo(bool fifo)
 {
+    switch_bank(0U);
+    std::uint8_t regVal = spi_read<1, USER_CTRL>()[0];
+
+    if(fifo == true)
+    {
+        regVal |= FIFO_EN;
+    }
+    else
+    {
+        regVal &= ~FIFO_EN;
+    }
+
+    spi_write<1U>(USER_CTRL, arr1{regVal});
 }
 
 void icm20948::set_fifo_mode(ICM20948::Fifo_Mode_Choice mode)
 {
+    std::uint8_t regVal;
+    if(mode != Fifo_Mode_Choice::ICM20948_CONTINUOUS)
+    {
+        regVal = 0x01;
+    }
+    else
+    {
+        regVal = 0x00;
+    }
+
+    switch_bank(0U);
+
+    spi_write<1U>(FIFO_MODE, arr1{regVal});
 }
 
 void icm20948::start_fifo(ICM20948::Fifo_Type fifo)
 {
+    fifoType = fifo;
+
+    switch_bank(0U);
+    spi_write<1>(FIFO_EN_2, arr1{static_cast<std::uint8_t>(fifoType)});
 }
 
 void icm20948::stop_fifo()
 {
+    switch_bank(0U);
+    spi_write<1>(FIFO_EN_2, arr1{0U});
 }
 
 void icm20948::reset_fifo()
 {
+    switch_bank(0U);
+
+    spi_write<1>(FIFO_RST, arr1{0x01U});
+    spi_write<1>(FIFO_RST, arr1{0x00U});
 }
 
 
-std::int16_t icm20948::get_fifo_count()
+std::uint16_t icm20948::get_fifo_count()
 {
+    switch_bank(0U);
+
+    arr2 fifoCount = spi_read<2, FIFO_COUNT>();
+
+    /* TODO: These might be switched - check endianess. */
+    uint16_t ret = fifoCount[0U] << 8U | fifoCount[1U];
+    return ret;
 }
 
-std::int16_t icm20948::get_number_of_fifo_data_sets()
+std::uint16_t icm20948::get_number_of_fifo_data_sets()
 {
+    std::uint16_t numberOfSets = get_fifo_count();
+
+    if((fifoType == Fifo_Type::ICM20948_FIFO_ACC) || (fifoType == Fifo_Type::ICM20948_FIFO_GYR))
+    {
+        numberOfSets /= 6U;
+    }
+    else if(fifoType == Fifo_Type::ICM20948_FIFO_ACC_GYR)
+    {
+        numberOfSets /= 12U;
+    }
+
+    return numberOfSets;
 }
 
 void icm20948::find_fifo_begin()
 {
+    switch_bank(0U);
+
+    if((fifoType == Fifo_Type::ICM20948_FIFO_ACC) || (fifoType == Fifo_Type::ICM20948_FIFO_GYR))
+    {
+        std::uint16_t start = get_fifo_count() % 6U;
+        for(std::uint16_t i = 0U; i < start; i++)
+        {
+            spi_read<1, ICM20948::FIFO_R_W>();
+        }
+    }
+    else if(fifoType == Fifo_Type::ICM20948_FIFO_ACC)
+    {
+        std::uint16_t start = get_fifo_count() % 12U;
+        for(std::uint16_t i = 0U; i < start; i++)
+        {
+            spi_read<1, ICM20948::FIFO_R_W>();
+        }
+    }
 }
 
 
