@@ -69,9 +69,9 @@
 /** ===============================================================================================
  *  CONSTANTS
  */
+
 namespace ICM20948
 {
-
 
 static constexpr TickType_t PERIOD_MS{10};
 static constexpr TickType_t RESET_DELAY{10 / PERIOD_MS};
@@ -213,6 +213,87 @@ icm20948::icm20948(spi_device_handle_t spi, const chip_selector<>& cs) : spi{spi
 }
 
 
+/* ---------------- FIFO ----------------- */
+void icm20948::enable_fifo(bool fifo)
+{
+}
+
+void icm20948::set_fifo_mode(ICM20948::Fifo_Mode_Choice mode)
+{
+}
+
+void icm20948::start_fifo(ICM20948::Fifo_Type fifo)
+{
+}
+
+void icm20948::stop_fifo()
+{
+}
+
+void icm20948::reset_fifo()
+{
+}
+
+
+std::int16_t icm20948::get_fifo_count()
+{
+}
+
+std::int16_t icm20948::get_number_of_fifo_data_sets()
+{
+}
+
+void icm20948::find_fifo_begin()
+{
+}
+
+
+/* ------------ MAGNETOMETER ------------- */
+bool icm20948::init_magnetometer()
+{
+    reset_mag();
+    reset();
+    sleep(false);
+
+    spi_write(ODR_ALIGN_EN, arr1{0x01U});        // aligns ODR
+    vTaskDelay(ICM20948::RESET_DELAY);
+
+    std::uint16_t whoAmI = who_am_i_mag();
+    if(!((whoAmI == AK09916_WHO_AM_I_1) || (whoAmI == AK09916_WHO_AM_I_2)))
+    {
+        return false;
+    }
+    set_mag_op_mode(Ak09916_Op_Mode::AK09916_CONT_MODE_100HZ);
+
+    return true;
+}
+
+std::uint16_t icm20948::who_am_i_mag()
+{
+    return static_cast<std::uint16_t>(read_ak09916_register16(AK09916_WIA_1));
+}
+
+void icm20948::set_mag_op_mode(Ak09916_Op_Mode opMode)
+{
+    write_ak09916_register8(AK09916_CNTL_2, static_cast<std::uint8_t>(opMode));
+
+    vTaskDelay(ICM20948::RESET_DELAY);
+
+    if(opMode != Ak09916_Op_Mode::AK09916_PWR_DOWN)
+    {
+        enable_mag_data_read(AK09916_HXL, 0x08);
+    }
+}
+
+void icm20948::reset_mag()
+{
+    write_ak09916_register8(AK09916_CNTL_3, 0x01U);
+
+    vTaskDelay(ICM20948::RESET_MAG_DELAY);
+}
+
+
+
 /** ===============================================================================================
  *  PROTECTED METHOD DEFINITIONS
  */
@@ -281,7 +362,7 @@ void icm20948::switch_bank(std::uint8_t newBank)
     }
     currentBank = newBank;
 
-    spi_write(ICM20948::REG_BANK_SEL, arr1{static_cast<std::uint8_t>(currentBank << 4U)});
+    spi_write(REG_BANK_SEL, arr1{static_cast<std::uint8_t>(currentBank << 4U)});
 }
 
 
@@ -289,9 +370,9 @@ void icm20948::switch_bank(std::uint8_t newBank)
 void icm20948::write_ak09916_register8(std::uint8_t reg, std::uint8_t val)
 {
     switch_bank(3U);
-    spi_write(arr2{ICM20948::I2C_SLV0_ADDR, ICM20948::AK09916_ADDRESS});
-    spi_write(arr2{ICM20948::I2C_SLV0_REG, reg});
-    spi_write(arr2{ICM20948::I2C_SLV0_DO, val});
+    spi_write(arr2{I2C_SLV0_ADDR, AK09916_ADDRESS});
+    spi_write(arr2{I2C_SLV0_REG, reg});
+    spi_write(arr2{I2C_SLV0_DO, val});
 }
 
 std::uint8_t icm20948::read_ak09916_register8(std::uint8_t reg)
@@ -300,7 +381,7 @@ std::uint8_t icm20948::read_ak09916_register8(std::uint8_t reg)
     enable_mag_data_read(reg, 0x01U);
     enable_mag_data_read(AK09916_HXL, 0x08U);
 
-    std::uint8_t val = spi_read<1U, ICM20948::EXT_SLV_SENS_DATA_00>()[0U];
+    std::uint8_t val = spi_read<1U, EXT_SLV_SENS_DATA_00>()[0U];
     return val;
 }
 
@@ -308,8 +389,8 @@ std::int16_t icm20948::read_ak09916_register16(std::uint8_t reg)
 {
     switch_bank(0U);
     enable_mag_data_read(reg, 0x02U);
-    auto regValue = spi_read<2U, ICM20948::EXT_SLV_SENS_DATA_00>();
-    enable_mag_data_read(ICM20948::AK09916_HXL, 0x08U);
+    auto regValue = spi_read<2U, EXT_SLV_SENS_DATA_00>();
+    enable_mag_data_read(AK09916_HXL, 0x08U);
 
     std::int16_t ret = regValue[1U] << 8U | regValue[0U];
     return ret;
@@ -341,7 +422,7 @@ vec3<> icm20948::read_xyz_val_from_fifo()
     using FIFOTriple = std::array<std::uint8_t, 6U>;
     switch_bank(0U);
 
-    uint8_t    reg        = ICM20948::FIFO_R_W | 0x80U;
+    uint8_t    reg        = FIFO_R_W | 0x80U;
     FIFOTriple fifoTriple = spi_write(reg, FIFOTriple{0U, 0U, 0U, 0U, 0U, 0U});
 
     vec3<> xyzResult;
@@ -356,10 +437,10 @@ void icm20948::enable_mag_data_read(std::uint8_t reg, std::uint8_t bytes)
 {
     switch_bank(3U);
 
-    spi_write(ICM20948::I2C_SLV0_ADDR, arr1{AK09916_ADDRESS | AK09916_READ});        // read AK09916
-    spi_write(ICM20948::I2C_SLV0_REG, arr1{reg});        // define AK09916 register to be read
+    spi_write(I2C_SLV0_ADDR, arr1{AK09916_ADDRESS | AK09916_READ});        // read AK09916
+    spi_write(I2C_SLV0_REG, arr1{reg});        // define AK09916 register to be read
     spi_write(
-      ICM20948::I2C_SLV0_CTRL,
+      I2C_SLV0_CTRL,
       arr1{static_cast<std::uint8_t>(0x80U | bytes)});        // enable read | number of byte
 
     vTaskDelay(ICM20948::RESET_DELAY);
@@ -370,10 +451,10 @@ void icm20948::set_clock_to_auto_select()
 {
     switch_bank(0U);
 
-    std::uint8_t regVal = spi_read<1U, ICM20948::PWR_MGMT_1>()[0];
+    std::uint8_t regVal = spi_read<1U, PWR_MGMT_1>()[0];
     regVal |= 0x01U;
 
-    spi_write<1U>(ICM20948::PWR_MGMT_1, arr1{regVal});
+    spi_write<1U>(PWR_MGMT_1, arr1{regVal});
 
     vTaskDelay(ICM20948::RESET_DELAY);
 }
