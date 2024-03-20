@@ -58,6 +58,7 @@
  *  INCLUDES
  */
 #include <cmath>
+#include <compare>
 #include <iostream>
 #include <limits>
 #include <numbers>
@@ -76,8 +77,9 @@ public:
     T y{};
     T z{};
 
-    constexpr vec3()            = default;
-    constexpr vec3(const vec3&) = default;
+    constexpr vec3()             = default;
+    constexpr vec3(const vec3&)  = default;
+    constexpr vec3(const vec3&&) = default;
     constexpr vec3(T x, T y, T z);
 
     constexpr T       dot(const vec3<T>& b) const;

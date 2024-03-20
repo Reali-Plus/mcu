@@ -165,6 +165,10 @@ protected:
     template<std::size_t N>
     std::array<std::uint8_t, N> spi_write(const std::array<std::uint8_t, N> data);
 
+    template<std::size_t N>
+    std::array<std::uint8_t, N> icm20948::spi_write(std::uint8_t                      reg,
+                                                    const std::array<std::uint8_t, N> data);
+
     template<std::size_t N, std::uint8_t reg>
     std::array<std::uint8_t, N> spi_read();
 

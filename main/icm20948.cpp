@@ -62,6 +62,7 @@
 
 #include "freertos/task.h"
 
+#include <algorithm>
 #include <cstdint>
 
 
@@ -217,6 +218,22 @@ icm20948::icm20948(spi_device_handle_t spi, const chip_selector<>& cs) : spi{spi
  */
 
 template<std::size_t N>
+std::array<std::uint8_t, N> icm20948::spi_write(std::uint8_t                      reg,
+                                                const std::array<std::uint8_t, N> data)
+{
+    std::array<std::uint8_t, N + 1U> values;
+    values[0] = reg;
+    std::copy(data.begin(), data.end(), values.begin() + 1U);
+
+    values = spi_write(values);
+
+    std::array<std::uint8_t, N> ret;
+    std::copy{values.begin() + 1, values.end(), ret.begin()};
+
+    return ret;
+}
+
+template<std::size_t N>
 std::array<std::uint8_t, N> icm20948::spi_write(const std::array<std::uint8_t, N> data)
 {
     std::array<std::uint8_t, N> receptionData = {0U};
@@ -264,8 +281,10 @@ void icm20948::switch_bank(std::uint8_t newBank)
     }
     currentBank = newBank;
 
-    spi_write(arr2{ICM20948::REG_BANK_SEL, static_cast<std::uint8_t>(currentBank << 4U)});
+    spi_write(ICM20948::REG_BANK_SEL, arr1{static_cast<std::uint8_t>(currentBank << 4U)});
 }
+
+
 
 void icm20948::write_ak09916_register8(std::uint8_t reg, std::uint8_t val)
 {
@@ -316,6 +335,48 @@ vec3<> icm20948::correct_gyr_raw_values(vec3<> gyrRawVal)
     return gyrRawVal - (gyrOffsetVal / gyrRangeFactor);
 }
 
+
+vec3<> icm20948::read_xyz_val_from_fifo()
+{
+    using FIFOTriple = std::array<std::uint8_t, 6U>;
+    switch_bank(0U);
+
+    uint8_t    reg        = ICM20948::FIFO_R_W | 0x80U;
+    FIFOTriple fifoTriple = spi_write(reg, FIFOTriple{0U, 0U, 0U, 0U, 0U, 0U});
+
+    vec3<> xyzResult;
+    xyzResult.x = (static_cast<std::uint16_t>((fifoTriple[0U] << 8) + fifoTriple[1U]])) * 1.0;
+    xyzResult.y = (static_cast<std::uint16_t>((fifoTriple[2U] << 8) + fifoTriple[3U])) * 1.0;
+    xyzResult.z = (static_cast<std::uint16_t>((fifoTriple[4U] << 8) + fifoTriple[5U])) * 1.0;
+
+    return xyzResult;
+}
+
+void icm20948::enable_mag_data_read(std::uint8_t reg, std::uint8_t bytes)
+{
+    switch_bank(3U);
+
+    spi_write(ICM20948::I2C_SLV0_ADDR, arr1{AK09916_ADDRESS | AK09916_READ});        // read AK09916
+    spi_write(ICM20948::I2C_SLV0_REG, arr1{reg});        // define AK09916 register to be read
+    spi_write(
+      ICM20948::I2C_SLV0_CTRL,
+      arr1{static_cast<std::uint8_t>(0x80U | bytes)});        // enable read | number of byte
+
+    vTaskDelay(ICM20948::RESET_DELAY);
+}
+
+
+void icm20948::set_clock_to_auto_select()
+{
+    switch_bank(0U);
+
+    std::uint8_t regVal = spi_read<1U, ICM20948::PWR_MGMT_1>()[0];
+    regVal |= 0x01U;
+
+    spi_write<1U>(ICM20948::PWR_MGMT_1, arr1{regVal});
+
+    vTaskDelay(ICM20948::RESET_DELAY);
+}
 
 
 /**

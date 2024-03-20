@@ -140,6 +140,13 @@ extern "C" void app_main(void)
     {
         lcd_cmd(spi, 0xCC, false);
     }
+
+    static constexpr std::array<gpio_num_t, 5> csPins{
+      GPIO_NUM_21, GPIO_NUM_36, GPIO_NUM_36, GPIO_NUM_37, GPIO_NUM_38};
+
+    chip_selector<> imu1ChipSelector{csPins, {1, 1, 1, 0, 1}};
+
+    icm20948 imu1{spi, imu1ChipSelector};
 }
 
 
