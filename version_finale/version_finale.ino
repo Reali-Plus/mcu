@@ -13,6 +13,10 @@
 
 #include <SPI.h>
 #include <ICM20948_WE.h>
+#include <Wire.h>
+
+#define PCA_ADDR 0x41
+
 #define CS_PIN 35   // Chip Select Pin
 
 #define CS_A  21
@@ -57,6 +61,11 @@ void setup() {
   pinMode(CS_C, OUTPUT);
   digitalWrite(CS_A, HIGH);
   digitalWrite(CS_C, HIGH);
+
+  Wire.begin();
+  Wire.beginTransmission(PCA_ADDR);
+  Wire.write(0xAA);
+  Wire.endTransmission();
 
   Serial.begin(115200);
   while(!Serial) {}
