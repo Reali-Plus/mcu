@@ -88,7 +88,7 @@ public:
     icm20948(spi_device_handle_t spi, const chip_selector<>& cs);
 
 
-    uint8_t whoAmI();
+    [[nodiscard]] uint8_t whoAmI();
 
 
     /* ----------- BASIC SETTINGS ------------ */
@@ -112,27 +112,27 @@ public:
     /* ------------ X Y Z RESULTS ------------ */
     void read_sensor();
 
-    vec3<> get_g_values();
-    vec3<> get_g_values_from_fifo();
-    vec3<> get_acc_raw_values();
-    vec3<> get_acc_raw_values_from_fifo();
-    vec3<> get_corrected_acc_raw_values_from_fifo();
-    vec3<> get_corrected_acc_raw_values();
-    float  get_resultant_g(vec3<> gVal);
+    [[nodiscard]] vec3<> get_g_values();
+    [[nodiscard]] vec3<> get_g_values_from_fifo();
+    [[nodiscard]] vec3<> get_acc_raw_values();
+    [[nodiscard]] vec3<> get_acc_raw_values_from_fifo();
+    [[nodiscard]] vec3<> get_corrected_acc_raw_values_from_fifo();
+    [[nodiscard]] vec3<> get_corrected_acc_raw_values();
+    [[nodiscard]] float  get_resultant_g(vec3<> gVal);
 
-    vec3<> get_gyr_raw_values();
-    vec3<> get_corrected_gyr_raw_values();
-    vec3<> get_gyr_values();
-    vec3<> get_gyr_values_from_fifo();
-    vec3<> get_mag_values();
-    float  get_temperature();
+    [[nodiscard]] vec3<> get_gyr_raw_values();
+    [[nodiscard]] vec3<> get_corrected_gyr_raw_values();
+    [[nodiscard]] vec3<> get_gyr_values();
+    [[nodiscard]] vec3<> get_gyr_values_from_fifo();
+    [[nodiscard]] vec3<> get_mag_values();
+    [[nodiscard]] float  get_temperature();
 
 
     /* ------- ANGLES AND ORIENTATION -------- */
-    vec3<>                get_angles();
-    ICM20948::Orientation get_orientation();
-    float                 get_pitch();
-    float                 get_roll();
+    [[nodiscard]] vec3<>                get_angles();
+    [[nodiscard]] ICM20948::Orientation get_orientation();
+    [[nodiscard]] float                 get_pitch();
+    [[nodiscard]] float                 get_roll();
 
 
     /* -------- Power, Sleep, Standby -------- */
@@ -150,42 +150,46 @@ public:
     void stop_fifo();
     void reset_fifo();
 
-    std::uint16_t get_fifo_count();
-    std::uint16_t get_number_of_fifo_data_sets();
-    void          find_fifo_begin();
+    [[nodiscard]] std::uint16_t get_fifo_count();
+    [[nodiscard]] std::uint16_t get_number_of_fifo_data_sets();
+
+    void find_fifo_begin();
 
     /* ------------ MAGNETOMETER ------------- */
-    bool          init_magnetometer();
-    std::uint16_t who_am_i_mag();
-    void          set_mag_op_mode(ICM20948::Ak09916_Op_Mode opMode);
-    void          reset_mag();
+    [[nodiscard]] std::uint16_t who_am_i_mag();
+
+    bool init_magnetometer();
+    void set_mag_op_mode(ICM20948::Ak09916_Op_Mode opMode);
+    void reset_mag();
 
 
 protected:
     template<std::size_t N>
-    std::array<std::uint8_t, N> spi_write(const std::array<std::uint8_t, N> data);
+    inline std::array<std::uint8_t, N> spi_write(const std::array<std::uint8_t, N> data);
 
     template<std::size_t N>
-    std::array<std::uint8_t, N> icm20948::spi_write(std::uint8_t                      reg,
-                                                    const std::array<std::uint8_t, N> data);
+    inline std::array<std::uint8_t, N> icm20948::spi_write(std::uint8_t                      reg,
+                                                           const std::array<std::uint8_t, N> data);
+
+    std::uint8_t icm20948::spi_write(std::uint8_t reg, std::uint8_t data);
 
     template<std::size_t N, std::uint8_t reg>
-    std::array<std::uint8_t, N> spi_read();
+    [[nodiscard]] std::array<std::uint8_t, N> spi_read();
 
-    void switch_bank(std::uint8_t newBank);
+    inline void switch_bank(std::uint8_t newBank);
 
 
-    void         write_ak09916_register8(std::uint8_t reg, std::uint8_t val);
-    std::uint8_t read_ak09916_register8(std::uint8_t reg);
-    std::int16_t read_ak09916_register16(std::uint8_t reg);
+    void                       write_ak09916_register8(std::uint8_t reg, std::uint8_t val);
+    [[nodiscard]] std::uint8_t read_ak09916_register8(std::uint8_t reg);
+    [[nodiscard]] std::int16_t read_ak09916_register16(std::uint8_t reg);
 
     void reset();
 
-    vec3<> correct_acc_raw_values(vec3<> accRawVal);
-    vec3<> correct_gyr_raw_values(vec3<> gyrRawVal);
+    [[nodiscard]] inline vec3<> correct_acc_raw_values(vec3<> accRawVal);
+    [[nodiscard]] inline vec3<> correct_gyr_raw_values(vec3<> gyrRawVal);
 
-    vec3<> read_xyz_val_from_fifo();
-    void   enable_mag_data_read(std::uint8_t reg, std::uint8_t bytes);
+    [[nodiscard]] vec3<> read_xyz_val_from_fifo();
+    void                 enable_mag_data_read(std::uint8_t reg, std::uint8_t bytes);
 
     void set_clock_to_auto_select();
 

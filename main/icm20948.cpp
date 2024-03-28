@@ -213,6 +213,43 @@ icm20948::icm20948(spi_device_handle_t spi, const chip_selector<>& cs) : spi{spi
 }
 
 
+/* -------- Power, Sleep, Standby -------- */
+void icm20948::enable_cycle(ICM20948::Cycle cycle)
+{
+}
+
+void icm20948::enable_low_power(bool enLP)
+{
+}
+
+void icm20948::set_gyr_average_in_cycle_mode(ICM20948::Gyro_Avg_Low_Pwr avg)
+{
+}
+
+void icm20948::set_acc_average_in_cycle_mode(ICM20948::Acc_Avg_Low_Pwr avg)
+{
+}
+
+void icm20948::sleep(bool sleep)
+{
+    switch_bank(0U);
+
+    std::uint8_t regVal = spi_read<1, PWR_MGMT_1>()[0];
+
+    if(sleep == true)
+    {
+        regVal |= SLEEP;
+    }
+    else
+    {
+        regVal &= ~SLEEP;
+    }
+
+    spi_write(PWR_MGMT_1, regVal);
+}
+
+
+
 /* ---------------- FIFO ----------------- */
 
 void icm20948::enable_fifo(bool fifo)
@@ -229,7 +266,7 @@ void icm20948::enable_fifo(bool fifo)
         regVal &= ~FIFO_EN;
     }
 
-    spi_write<1U>(USER_CTRL, arr1{regVal});
+    spi_write(USER_CTRL, regVal);
 }
 
 void icm20948::set_fifo_mode(ICM20948::Fifo_Mode_Choice mode)
@@ -245,8 +282,7 @@ void icm20948::set_fifo_mode(ICM20948::Fifo_Mode_Choice mode)
     }
 
     switch_bank(0U);
-
-    spi_write<1U>(FIFO_MODE, arr1{regVal});
+    spi_write(FIFO_MODE, regVal);
 }
 
 void icm20948::start_fifo(ICM20948::Fifo_Type fifo)
@@ -254,21 +290,21 @@ void icm20948::start_fifo(ICM20948::Fifo_Type fifo)
     fifoType = fifo;
 
     switch_bank(0U);
-    spi_write<1>(FIFO_EN_2, arr1{static_cast<std::uint8_t>(fifoType)});
+    spi_write(FIFO_EN_2, static_cast<std::uint8_t>(fifoType));
 }
 
 void icm20948::stop_fifo()
 {
     switch_bank(0U);
-    spi_write<1>(FIFO_EN_2, arr1{0U});
+    spi_write(FIFO_EN_2, 0U);
 }
 
 void icm20948::reset_fifo()
 {
     switch_bank(0U);
 
-    spi_write<1>(FIFO_RST, arr1{0x01U});
-    spi_write<1>(FIFO_RST, arr1{0x00U});
+    spi_write(FIFO_RST, 0x01U);
+    spi_write(FIFO_RST, 0x00U);
 }
 
 
@@ -323,6 +359,12 @@ void icm20948::find_fifo_begin()
 
 
 /* ------------ MAGNETOMETER ------------- */
+
+std::uint16_t icm20948::who_am_i_mag()
+{
+    return static_cast<std::uint16_t>(read_ak09916_register16(AK09916_WIA_1));
+}
+
 bool icm20948::init_magnetometer()
 {
     reset_mag();
@@ -340,11 +382,6 @@ bool icm20948::init_magnetometer()
     set_mag_op_mode(Ak09916_Op_Mode::AK09916_CONT_MODE_100HZ);
 
     return true;
-}
-
-std::uint16_t icm20948::who_am_i_mag()
-{
-    return static_cast<std::uint16_t>(read_ak09916_register16(AK09916_WIA_1));
 }
 
 void icm20948::set_mag_op_mode(Ak09916_Op_Mode opMode)
@@ -371,6 +408,11 @@ void icm20948::reset_mag()
 /** ===============================================================================================
  *  PROTECTED METHOD DEFINITIONS
  */
+
+std::uint8_t icm20948::spi_write(std::uint8_t reg, std::uint8_t data)
+{
+    return spi_write<1U>(reg, arr1{data})[0];
+}
 
 template<std::size_t N>
 std::array<std::uint8_t, N> icm20948::spi_write(std::uint8_t                      reg,
