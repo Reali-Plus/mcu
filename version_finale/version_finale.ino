@@ -1,6 +1,11 @@
 
 #include <SPI.h>
 #include <ICM20948_WE.h>
+
+
+#include <Wire.h>
+
+
 bool spi = true;
 
 #include <BLEDevice.h>
@@ -50,6 +55,11 @@ void setup() {
   digitalWrite(36, HIGH);
 
   delay(750);
+  
+
+  Serial.begin(115200);
+  while(!Serial) {}
+  
   if(!fingerIMU.init()){
     Serial.println("finger does not respond");
   }
@@ -92,7 +102,7 @@ void setup() {
   Serial.println("Position your ICM20948 flat and don't move it - calibrating...");
   delay(1000);
   fingerIMU.autoOffsets();
-  //handIMU.autoOffsets();
+  handIMU.autoOffsets();
   Serial.println("Done!"); 
   
 
