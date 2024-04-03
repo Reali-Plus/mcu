@@ -1,19 +1,6 @@
-/***************************************************************************
-* Example sketch for the ICM20948_WE library
-*
-* This sketch shows how to use SPI to retrieve accelerometer, gyroscope, 
-* temperature and magnetometer data from the ICM20948.
-* 
-* Further information can be found on:
-*
-* https://wolles-elektronikkiste.de/icm-20948-9-achsensensor-teil-i (German)
-* https://wolles-elektronikkiste.de/en/icm-20948-9-axis-sensor-part-i (English)
-* 
-***************************************************************************/
 
 #include <SPI.h>
 #include <ICM20948_WE.h>
-#define CS_PIN 35   // Chip Select Pin
 bool spi = true;
 
 #include <BLEDevice.h>
@@ -25,7 +12,8 @@ bool spi = true;
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
 
-ICM20948_WE myIMU = ICM20948_WE(CS_PIN, spi);
+ICM20948_WE fingerIMU = ICM20948_WE(36, spi);
+ICM20948_WE handIMU = ICM20948_WE(35, spi);
 
 BLEServer *pServer;
 BLEService *pService; 
@@ -45,63 +33,103 @@ class MyCallbacks: public BLECharacteristicCallbacks {
       }
     }
 };
-char message[32] = {};
+char message[64] = {};
 
 void setup() {
-  pinMode(21, OUTPUT);
-  pinMode(36, OUTPUT);
-  digitalWrite(21, HIGH);
-  digitalWrite(36, HIGH);
   Serial.begin(115200);
   while(!Serial) {}
-  
-  if(!myIMU.init()){
-    Serial.println("ICM20948 does not respond");
-  }
-  else{
-    Serial.println("ICM20948 is connected");
-  }
+  pinMode(21, OUTPUT);
+  pinMode(37, OUTPUT);
+  pinMode(38, OUTPUT);
+  pinMode(35, OUTPUT);
+  pinMode(36, OUTPUT);
+  digitalWrite(21, HIGH);
+  digitalWrite(37, HIGH);
+  digitalWrite(38, HIGH);
+  digitalWrite(35, HIGH);
+  digitalWrite(36, HIGH);
 
-  if(!myIMU.initMagnetometer()){
-    Serial.println("Magnetometer does not respond");
+  delay(750);
+  if(!fingerIMU.init()){
+    Serial.println("finger does not respond");
   }
   else{
-    Serial.println("Magnetometer is connected");
+    Serial.println("finger is connected");
+  }
+  delay(750);
+  if(!fingerIMU.initMagnetometer()){
+    Serial.println("fingerMagnetometer does not respond");
+  }
+  //TODO fix finger magnetometer
+  else{
+    Serial.println("fingerMagnetometer is connected");
+  }
+  delay(750);
+  if(!handIMU.init()){
+    Serial.println("hand does not respond");
+  }
+  else{
+    Serial.println("hand is connected");
+  }
+  delay(750);
+  if(!handIMU.initMagnetometer()){
+    Serial.println("handMagnetometer does not respond");
+  }
+  else{
+    Serial.println("handMagnetometer is connected");
   }
 
   
 /******************* Basic Settings ******************/
 
   /* You can set the SPI clock speed. The default is 8 MHz. */ 
-  myIMU.setSPIClockSpeed(8000000);
+  fingerIMU.setSPIClockSpeed(8000000);
  
 
-  //myIMU.setAccOffsets(-16330.0, 16450.0, -16600.0, 16180.0, -16520.0, 16690.0);
-    
+  //fingerIMU.setAccOffsets(-16330.0, 16450.0, -16600.0, 16180.0, -16520.0, 16690.0);
+  
   
   Serial.println("Position your ICM20948 flat and don't move it - calibrating...");
   delay(1000);
-  myIMU.autoOffsets();
+  fingerIMU.autoOffsets();
+  //handIMU.autoOffsets();
   Serial.println("Done!"); 
   
 
-  myIMU.setAccRange(ICM20948_ACC_RANGE_2G);
+  fingerIMU.setAccRange(ICM20948_ACC_RANGE_2G);
   
 
-  myIMU.setAccDLPF(ICM20948_DLPF_6);    
+  fingerIMU.setAccDLPF(ICM20948_DLPF_6);    
 
-  myIMU.setAccSampleRateDivider(1);
+  fingerIMU.setAccSampleRateDivider(1);
 
-  myIMU.setGyrRange(ICM20948_GYRO_RANGE_500);
+  fingerIMU.setGyrRange(ICM20948_GYRO_RANGE_500);
 
-  myIMU.setGyrDLPF(ICM20948_DLPF_6);  
+  fingerIMU.setGyrDLPF(ICM20948_DLPF_6);  
 
-  myIMU.setGyrSampleRateDivider(10);
+  fingerIMU.setGyrSampleRateDivider(10);
 
-  myIMU.setTempDLPF(ICM20948_DLPF_6);
+  fingerIMU.setTempDLPF(ICM20948_DLPF_6);
 
-  myIMU.setMagOpMode(AK09916_CONT_MODE_20HZ);
+  fingerIMU.setMagOpMode(AK09916_CONT_MODE_20HZ);
 
+  fingerIMU.setAccRange(ICM20948_ACC_RANGE_2G);
+  
+  
+  handIMU.setAccDLPF(ICM20948_DLPF_6);    
+
+  handIMU.setAccSampleRateDivider(1);
+
+  handIMU.setGyrRange(ICM20948_GYRO_RANGE_500);
+
+  handIMU.setGyrDLPF(ICM20948_DLPF_6);  
+
+  handIMU.setGyrSampleRateDivider(10);
+
+  handIMU.setTempDLPF(ICM20948_DLPF_6);
+
+  handIMU.setMagOpMode(AK09916_CONT_MODE_20HZ);
+  
 
 
   BLEDevice::init("MyESP32");
@@ -125,28 +153,40 @@ void setup() {
 }
 
 void loop() {
-  myIMU.readSensor();
-  xyzFloat acc = myIMU.getGValues();
-  xyzFloat gyr = myIMU.getGyrValues();
-  xyzFloat mag = myIMU.getMagValues();
-  float temp = myIMU.getTemperature();
-  float resultantG = myIMU.getResultantG(acc);
+  fingerIMU.readSensor();
+  handIMU.readSensor();
+  xyzFloat accF = fingerIMU.getGValues();
+  xyzFloat gyrF = fingerIMU.getGyrValues();
+  xyzFloat magF = fingerIMU.getMagValues();
+  float tempF = fingerIMU.getTemperature();
+  float resultantGF = fingerIMU.getResultantG(accF);
+  xyzFloat accH = handIMU.getGValues();
+  xyzFloat gyrH = handIMU.getGyrValues();
+  xyzFloat magH = handIMU.getMagValues();
+  float tempH = handIMU.getTemperature();
+  float resultantGH = handIMU.getResultantG(accH);
+  Serial.print("finger: ");
+  Serial.print(accF.x);
+  Serial.print("\n");
+  Serial.print("hand: ");
+  Serial.print(accH.x);
+  Serial.print("\n");
   
   Serial.println("Acceleration in g (x,y,z):");
-  Serial.print(acc.x);
+  Serial.print(accF.x);
   Serial.print("   ");
-  Serial.print(acc.y);
+  Serial.print(accF.y);
   Serial.print("   ");
-  Serial.println(acc.z);
-
+  Serial.println(accF.z);
+/*
   Serial.println("Gyroscope data in degrees/s: ");
-  Serial.print(gyr.x);
+  Serial.print(gyrF.x);
   Serial.print("   ");
-  Serial.print(gyr.y);
+  Serial.print(gyrF.y);
   Serial.print("   ");
-  Serial.println(gyr.z);
-
-  Serial.println("Magnetometer Data in µTesla: ");
+  Serial.println(gyrF.z);
+*/
+  /*Serial.println("Magnetometer Data in µTesla: ");
   Serial.print(mag.x);
   Serial.print("   ");
   Serial.print(mag.y);
@@ -154,10 +194,10 @@ void loop() {
   Serial.println(mag.z);
 
   Serial.println("Temperature in °C: ");
-  Serial.println(temp);
+  Serial.println(temp);*/
 
-  sprintf(message, "%0.3f %0.3f %0.3f", gyr.x, gyr.y, gyr.z);
+  sprintf(message, "%0.2f %0.2f %0.2f %0.2f %0.2f %0.2f",accF.x, accF.y, accF.z-1, gyrF.x, gyrF.y, gyrF.z);
   // sprintf(message, "%0.3f %0.3f %0.3f", acc.x, acc.y, acc.z);
   pCharacteristic->setValue(message);
-  delay(100);
+  delay(150);
 }
