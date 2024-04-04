@@ -4,7 +4,10 @@
 
 
 #include <Wire.h>
+#define PCA_ADDR 0x20
 
+#define I2C_SDA 18
+#define I2C_SCL 17
 
 bool spi = true;
 
@@ -15,7 +18,6 @@ bool spi = true;
 
 #define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
-
 
 ICM20948_WE fingerIMU = ICM20948_WE(36, spi);
 ICM20948_WE handIMU = ICM20948_WE(35, spi);
@@ -28,13 +30,23 @@ class MyCallbacks: public BLECharacteristicCallbacks {
       std::string value = pCharacteristic->getValue();
 
       if (value.length() > 0) {
-        Serial.println("*********");
-        Serial.print("New value: ");
-        for (int i = 0; i < value.length(); i++)
-          Serial.print(value[i]);
-
-        Serial.println();
-        Serial.println("*********");
+        // Serial.println("*********");
+        // Serial.print("New value: ");
+      
+        if (value[1] == '1') {
+          Serial.println("Haptic -- ON");
+          Wire.begin(I2C_SDA, I2C_SCL);
+          Wire.beginTransmission(PCA_ADDR);
+          Wire.write(0xFF);
+          Wire.endTransmission();
+        }
+        else {
+          Serial.println("Haptic -- OFF");
+          Wire.begin(I2C_SDA, I2C_SCL);
+          Wire.beginTransmission(PCA_ADDR);
+          Wire.write(0x00);
+          Wire.endTransmission();
+        }
       }
     }
 };
@@ -175,19 +187,19 @@ void loop() {
   xyzFloat magH = handIMU.getMagValues();
   float tempH = handIMU.getTemperature();
   float resultantGH = handIMU.getResultantG(accH);
-  Serial.print("finger: ");
-  Serial.print(accF.x);
-  Serial.print("\n");
-  Serial.print("hand: ");
-  Serial.print(accH.x);
-  Serial.print("\n");
+  // Serial.print("finger: ");
+  // Serial.print(accF.x);
+  // Serial.print("\n");
+  // Serial.print("hand: ");
+  // Serial.print(accH.x);
+  // Serial.print("\n");
   
-  Serial.println("Acceleration in g (x,y,z):");
-  Serial.print(accF.x);
-  Serial.print("   ");
-  Serial.print(accF.y);
-  Serial.print("   ");
-  Serial.println(accF.z);
+  // Serial.println("Acceleration in g (x,y,z):");
+  // Serial.print(accF.x);
+  // Serial.print("   ");
+  // Serial.print(accF.y);
+  // Serial.print("   ");
+  // Serial.println(accF.z);
 /*
   Serial.println("Gyroscope data in degrees/s: ");
   Serial.print(gyrF.x);
@@ -206,8 +218,8 @@ void loop() {
   Serial.println("Temperature in °C: ");
   Serial.println(temp);*/
 
-  sprintf(message, "%0.2f %0.2f %0.2f %0.2f %0.2f %0.2f",accF.x, accF.y, accF.z-1, gyrF.x, gyrF.y, gyrF.z);
-  // sprintf(message, "%0.3f %0.3f %0.3f", acc.x, acc.y, acc.z);
+  // sprintf(message, "%0.2f %0.2f %0.2f %0.2f %0.2f %0.2f",accF.x, accF.y, accF.z-1, gyrF.x, gyrF.y, gyrF.z);
+  sprintf(message, "%0.3f %0.3f %0.3f", gyrF.x, gyrF.y, gyrF.z);
   pCharacteristic->setValue(message);
   delay(150);
 }
