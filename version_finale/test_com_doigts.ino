@@ -10,6 +10,8 @@ bool spi = true;
 
 const int NUMSENSORS = 8;
 
+float sensorData[48];
+
 ICM20948_WE IMU0 = ICM20948_WE(37,spi);
 ICM20948_WE IMU1 = ICM20948_WE(35,spi);
 ICM20948_WE IMU2 = ICM20948_WE(38,spi);
@@ -165,8 +167,28 @@ void loop() {
     sensors[i].readSensor();
     xyzFloat acc = sensors[i].getGValues();
     xyzFloat gyr = sensors[i].getGyrValues();
-    sprintf(message, "%d %0.2f %0.2f %0.2f %0.2f %0.2f %0.2f", i, acc.x, acc.y, acc.z-1, gyr.x, gyr.y, gyr.z);
-    Serial.println(message);
+    sensorData[i*6] = acc.x;  // Acceleration in x-axis for sensorIndex
+    sensorData[i*6+1] = acc.y;  // Acceleration in y-axis for sensorIndex
+    sensorData[i*6+2] = acc.z;  // Acceleration in z-axis for sensorIndex
+    sensorData[i*6+3] = gyr.x;  // Angular speed in x-axis for sensorIndex
+    sensorData[i*6+4] = gyr.y;  // Angular speed in y-axis for sensorIndex
+    sensorData[i*6+5] = gyr.z;  // Angular speed in z-axis for sensorIndex
+    
+    //sprintf(message+i*34,"%d04 %0.2f %0.2f %0.2f %0.2f %0.2f %0.2f", i, acc.x, acc.y, acc.z-1, gyr.x, gyr.y, gyr.z);
+    //Serial.println(message);
+    //Serial.write(sensorData[i])
   }
+  //Serial.println(message);
+  //Serial.println(sizeof(sensorData));
 
+  for (int i = 0; i < 48; i++) {
+      // Get the current float value
+      float value = sensorData[i];
+
+      // Convert the float into bytes and send each byte
+      byte *bytePointer = (byte*) &value;  // Reinterpret the float as an array of 4 bytes
+      for (int j = 0; j < 4; j++) {
+        Serial.write(bytePointer[j]);  // Send each byte of the float
+      }
+  }
 }
