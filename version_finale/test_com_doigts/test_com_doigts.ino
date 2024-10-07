@@ -1,30 +1,28 @@
 
 #include <SPI.h>
 #include <ICM20948_WE.h>
-
-
 #include <Wire.h>
-
 
 bool spi = true;
 
 const int NUMSENSORS = 8;
 
+const int HEART_BEAT_PIN = 5;
+
 float sensorData[48];
 
-ICM20948_WE IMU0 = ICM20948_WE(37,spi);
-ICM20948_WE IMU1 = ICM20948_WE(35,spi);
-ICM20948_WE IMU2 = ICM20948_WE(38,spi);
-ICM20948_WE IMU3 = ICM20948_WE(36,spi);
-ICM20948_WE IMU4 = ICM20948_WE(21,spi);
-ICM20948_WE IMU5 = ICM20948_WE(35,spi);
-ICM20948_WE IMU6 = ICM20948_WE(35,spi);
-ICM20948_WE IMU7 = ICM20948_WE(35,spi);
+ICM20948_WE IMU_AVANT_BRAS = ICM20948_WE(37,spi);
+ICM20948_WE IMU_MAIN = ICM20948_WE(35,spi);
+ICM20948_WE IMU_EPAULE = ICM20948_WE(38,spi);
+ICM20948_WE IMU_AURI = ICM20948_WE(36,spi);
+ICM20948_WE IMU_ANNU = ICM20948_WE(21,spi);
+ICM20948_WE IMU_MAJEUR = ICM20948_WE(35,spi);
+ICM20948_WE IMU_INDEX = ICM20948_WE(35,spi);
+ICM20948_WE IMU_POUCE = ICM20948_WE(35,spi);
 
 ICM20948_WE sensors[NUMSENSORS] = {
-  IMU0, IMU1, IMU2, IMU3, IMU4, IMU5, IMU6, IMU7
+  IMU_AVANT_BRAS, IMU_MAIN, IMU_EPAULE, IMU_AURI, IMU_ANNU, IMU_MAJEUR, IMU_INDEX, IMU_POUCE
 };
-
 
 
 char message[64] = {};
@@ -115,12 +113,16 @@ void update_mux(int id){
 void setup() {
   Serial.begin(115200);
   while(!Serial) {}
+
+  // heart beat pin 
+  pinMode(HEART_BEAT_PIN, OUTPUT);
+
+
   pinMode(21, OUTPUT);
   pinMode(37, OUTPUT);
   pinMode(38, OUTPUT);
   pinMode(35, OUTPUT);
   pinMode(36, OUTPUT);
-
 
   delay(200);
   
@@ -132,17 +134,22 @@ void setup() {
   for(int i = 0; i < NUMSENSORS; i++){
     update_mux(i);
     if(!sensors[i].init()){
-    Serial.println("| finger does not respond");
+
+    Serial.println((String)"| finger " + i + " does not respond"); 
+    digitalWrite(HEART_BEAT_PIN, HIGH);
+    delay(100);
+    digitalWrite(HEART_BEAT_PIN, LOW);
+    delay(100);
     }
     else{
-      Serial.println("| finger is connected");
+      Serial.println((String)"| finger " + i + " is connected");
     }
     
     delay(200);
     /******************* Basic Settings ******************/
     
     /* You can set the SPI clock speed. The default is 8 MHz. */ 
-    sensors[i].setSPIClockSpeed(8000000);
+    sensors[i].setSPIClockSpeed(4000000);
     
     Serial.println("| Position your ICM20948 flat and don't move it - calibrating...");
     delay(200);
@@ -174,21 +181,21 @@ void loop() {
     sensorData[i*6+4] = gyr.y;  // Angular speed in y-axis for sensorIndex
     sensorData[i*6+5] = gyr.z;  // Angular speed in z-axis for sensorIndex
     
-    //sprintf(message+i*34,"%d04 %0.2f %0.2f %0.2f %0.2f %0.2f %0.2f", i, acc.x, acc.y, acc.z-1, gyr.x, gyr.y, gyr.z);
-    //Serial.println(message);
-    //Serial.write(sensorData[i])
+    sprintf(message+i*34,"%d04 %0.2f %0.2f %0.2f %0.2f %0.2f %0.2f", i, acc.x, acc.y, acc.z-1, gyr.x, gyr.y, gyr.z);
+    Serial.println(message);
+    // Serial.write(sensorData[i])
   }
-  //Serial.println(message);
-  //Serial.println(sizeof(sensorData));
+  // Serial.println(message);
+  // Serial.println(sizeof(sensorData));
 
-  for (int i = 0; i < 48; i++) {
-      // Get the current float value
-      float value = sensorData[i];
+  // for (int i = 0; i < 48; i++) {
+  //     // Get the current float value
+  //     float value = sensorData[i];
 
-      // Convert the float into bytes and send each byte
-      byte *bytePointer = (byte*) &value;  // Reinterpret the float as an array of 4 bytes
-      for (int j = 0; j < 4; j++) {
-        Serial.write(bytePointer[j]);  // Send each byte of the float
-      }
-  }
+  //     // Convert the float into bytes and send each byte
+  //     byte *bytePointer = (byte*) &value;  // Reinterpret the float as an array of 4 bytes
+  //     for (int j = 0; j < 4; j++) {
+  //       Serial.write(bytePointer[j]);  // Send each byte of the float
+  //     }
+  // }
 }
