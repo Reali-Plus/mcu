@@ -1,4 +1,3 @@
-
 #include <SPI.h>
 #include <ICM20948_WE.h>
 #include <Wire.h>
@@ -6,6 +5,7 @@
 bool spi = true;
 
 const int NUMSENSORS = 8;
+const int MSG_BUFFER_SIZE = 34;
 
 const int HEART_BEAT_PIN = 5;
 
@@ -174,19 +174,21 @@ void loop() {
     sensors[i].readSensor();
     xyzFloat acc = sensors[i].getGValues();
     xyzFloat gyr = sensors[i].getGyrValues();
-    sensorData[i*6] = acc.x;  // Acceleration in x-axis for sensorIndex
-    sensorData[i*6+1] = acc.y;  // Acceleration in y-axis for sensorIndex
-    sensorData[i*6+2] = acc.z;  // Acceleration in z-axis for sensorIndex
-    sensorData[i*6+3] = gyr.x;  // Angular speed in x-axis for sensorIndex
-    sensorData[i*6+4] = gyr.y;  // Angular speed in y-axis for sensorIndex
-    sensorData[i*6+5] = gyr.z;  // Angular speed in z-axis for sensorIndex
+    //sensorData[i*6]   = 0.0;//acc.x;  // Acceleration in x-axis for sensorIndex
+    //sensorData[i*6+1] = 1.0;//acc.y;  // Acceleration in y-axis for sensorIndex
+    //sensorData[i*6+2] = 2.0;//acc.z;  // Acceleration in z-axis for sensorIndex
+    //sensorData[i*6+3] = 4.0;//gyr.x;  // Angular speed in x-axis for sensorIndex
+    //sensorData[i*6+4] = 8.0;//gyr.y;  // Angular speed in y-axis for sensorIndex
+    //sensorData[i*6+5] = 16.0;//gyr.z;  // Angular speed in z-axis for sensorIndex
     
-    sprintf(message+i*34,"%d04 %0.2f %0.2f %0.2f %0.2f %0.2f %0.2f", i, acc.x, acc.y, acc.z-1, gyr.x, gyr.y, gyr.z);
+    sprintf(message,"%d %0.2f %0.2f %0.2f %0.2f %0.2f %0.2f", i, acc.x, acc.y, acc.z, gyr.x, gyr.y, gyr.z);
+    //sprintf(message+i*MSG_BUFFER_SIZE,"%d04 %0.2f %0.2f %0.2f %0.2f %0.2f %0.2f", i, acc.x, acc.y, acc.z, gyr.x, gyr.y, gyr.z);
     Serial.println(message);
     // Serial.write(sensorData[i])
   }
-  // Serial.println(message);
-  // Serial.println(sizeof(sensorData));
+  delay(50);
+  //Serial.println(message);
+  //Serial.println(sizeof(sensorData));
 
   // for (int i = 0; i < 48; i++) {
   //     // Get the current float value
