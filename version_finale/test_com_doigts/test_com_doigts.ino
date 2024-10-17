@@ -56,24 +56,15 @@ void update_mux(int id){
     break;
 
     case 3:
-      //auriculaire
-      digitalWrite(21, HIGH);
+      //index
+      digitalWrite(21, LOW);
       digitalWrite(37, HIGH);
       digitalWrite(38, HIGH);
-      digitalWrite(35, HIGH);
+      digitalWrite(35, LOW);
       digitalWrite(36, LOW);
     break;
 
     case 4:
-      //annulaire
-      digitalWrite(21, LOW);
-      digitalWrite(37, HIGH);
-      digitalWrite(38, HIGH);
-      digitalWrite(35, HIGH);
-      digitalWrite(36, LOW);
-    break;
-
-    case 5:
       //majeur
       digitalWrite(21, HIGH);
       digitalWrite(37, HIGH);
@@ -82,12 +73,21 @@ void update_mux(int id){
       digitalWrite(36, LOW);
     break;
 
-    case 6:
-      //index
+    case 5:
+      //annulaire
       digitalWrite(21, LOW);
       digitalWrite(37, HIGH);
       digitalWrite(38, HIGH);
-      digitalWrite(35, LOW);
+      digitalWrite(35, HIGH);
+      digitalWrite(36, LOW);
+    break;
+
+    case 6:
+      //auriculaire
+      digitalWrite(21, HIGH);
+      digitalWrite(37, HIGH);
+      digitalWrite(38, HIGH);
+      digitalWrite(35, HIGH);
       digitalWrite(36, LOW);
     break;
 
