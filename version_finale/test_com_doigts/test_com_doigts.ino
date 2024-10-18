@@ -17,11 +17,11 @@ ICM20948_WE IMU_EPAULE = ICM20948_WE(38,spi);
 ICM20948_WE IMU_AURI = ICM20948_WE(36,spi);
 ICM20948_WE IMU_ANNU = ICM20948_WE(21,spi);
 ICM20948_WE IMU_MAJEUR = ICM20948_WE(35,spi);
-ICM20948_WE IMU_INDEX = ICM20948_WE(35,spi);
+ICM20948_WE IMU_INDEX = ICM20948_WE(21,spi);
 ICM20948_WE IMU_POUCE = ICM20948_WE(35,spi);
 
 ICM20948_WE sensors[NUMSENSORS] = {
-  IMU_AVANT_BRAS, IMU_MAIN, IMU_EPAULE, IMU_AURI, IMU_ANNU, IMU_MAJEUR, IMU_INDEX, IMU_POUCE
+  IMU_AVANT_BRAS, IMU_MAIN, IMU_EPAULE, IMU_INDEX, IMU_MAJEUR,IMU_ANNU ,IMU_AURI, IMU_POUCE
 };
 
 
@@ -174,30 +174,9 @@ void loop() {
     sensors[i].readSensor();
     xyzFloat acc = sensors[i].getGValues();
     xyzFloat gyr = sensors[i].getGyrValues();
-    //sensorData[i*6]   = 0.0;//acc.x;  // Acceleration in x-axis for sensorIndex
-    //sensorData[i*6+1] = 1.0;//acc.y;  // Acceleration in y-axis for sensorIndex
-    //sensorData[i*6+2] = 2.0;//acc.z;  // Acceleration in z-axis for sensorIndex
-    //sensorData[i*6+3] = 4.0;//gyr.x;  // Angular speed in x-axis for sensorIndex
-    //sensorData[i*6+4] = 8.0;//gyr.y;  // Angular speed in y-axis for sensorIndex
-    //sensorData[i*6+5] = 16.0;//gyr.z;  // Angular speed in z-axis for sensorIndex
     
     sprintf(message,"%d %0.2f %0.2f %0.2f %0.2f %0.2f %0.2f", i, acc.x, acc.y, acc.z, gyr.x, gyr.y, gyr.z);
-    //sprintf(message+i*MSG_BUFFER_SIZE,"%d04 %0.2f %0.2f %0.2f %0.2f %0.2f %0.2f", i, acc.x, acc.y, acc.z, gyr.x, gyr.y, gyr.z);
     Serial.println(message);
-    // Serial.write(sensorData[i])
   }
   delay(50);
-  //Serial.println(message);
-  //Serial.println(sizeof(sensorData));
-
-  // for (int i = 0; i < 48; i++) {
-  //     // Get the current float value
-  //     float value = sensorData[i];
-
-  //     // Convert the float into bytes and send each byte
-  //     byte *bytePointer = (byte*) &value;  // Reinterpret the float as an array of 4 bytes
-  //     for (int j = 0; j < 4; j++) {
-  //       Serial.write(bytePointer[j]);  // Send each byte of the float
-  //     }
-  // }
 }
