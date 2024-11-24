@@ -13,63 +13,71 @@ const int HEART_BEAT_PIN = 5;
 float sensorData[48];
 byte hapticData = 0x00;
 
-void updateHaptic(){
+void updateHaptic() {
   Wire.beginTransmission(PCF8574_ADDRESS);
   Wire.write(~(hapticData));  // Write the byte to the PCF8574
   Wire.endTransmission();  // End the transmission
-  }
-  
-void updateHapticData(int id, bool flag1, bool flag2){
-  
-  byte mask = 0b00000000;
-  switch(id){
-  
-  case 3:
-  mask = 0b10001000;
-  break;
-
-  case 4:
-  mask = 0b01000100;
-  break;
-
-  case 5:
-  mask = 0b00100010;
-  break;
-
-  case 6:
-  mask = 0b00010001;
-  break;
-
-  default:
-  mask = 0b00000000;
-  break;
-  
-  }
-  if(flag1){hapticData |= mask & 0x0F ;}
-  else{hapticData &= ~(mask & 0x0F) ;}
-  if(flag2){hapticData |= mask & 0xF0 ;}
-  else{hapticData &= ~(mask & 0xF0) ;}
-  
 }
-  
 
-ICM20948_WE IMU_AVANT_BRAS = ICM20948_WE(37,spi);
-ICM20948_WE IMU_MAIN = ICM20948_WE(35,spi);
-ICM20948_WE IMU_EPAULE = ICM20948_WE(38,spi);
-ICM20948_WE IMU_AURI = ICM20948_WE(36,spi);
-ICM20948_WE IMU_ANNU = ICM20948_WE(36,spi);
-ICM20948_WE IMU_MAJEUR = ICM20948_WE(36,spi);
-ICM20948_WE IMU_INDEX = ICM20948_WE(35,spi);
-ICM20948_WE IMU_POUCE = ICM20948_WE(35,spi);
+void updateHapticData(int id, bool flag1, bool flag2) {
+
+  byte mask = 0b00000000;
+  switch (id) {
+
+    case 3:
+      mask = 0b10001000;
+      break;
+
+    case 4:
+      mask = 0b01000100;
+      break;
+
+    case 5:
+      mask = 0b00100010;
+      break;
+
+    case 6:
+      mask = 0b00010001;
+      break;
+
+    default:
+      mask = 0b00000000;
+      break;
+
+  }
+  if (flag1) {
+    hapticData |= mask & 0x0F ;
+  }
+  else {
+    hapticData &= ~(mask & 0x0F) ;
+  }
+  if (flag2) {
+    hapticData |= mask & 0xF0 ;
+  }
+  else {
+    hapticData &= ~(mask & 0xF0) ;
+  }
+
+}
+
+
+ICM20948_WE IMU_AVANT_BRAS = ICM20948_WE(37, spi);
+ICM20948_WE IMU_MAIN = ICM20948_WE(35, spi);
+ICM20948_WE IMU_EPAULE = ICM20948_WE(38, spi);
+ICM20948_WE IMU_AURI = ICM20948_WE(36, spi);
+ICM20948_WE IMU_ANNU = ICM20948_WE(36, spi);
+ICM20948_WE IMU_MAJEUR = ICM20948_WE(36, spi);
+ICM20948_WE IMU_INDEX = ICM20948_WE(35, spi);
+ICM20948_WE IMU_POUCE = ICM20948_WE(35, spi);
 
 ICM20948_WE sensors[NUMSENSORS] = {
-  IMU_AVANT_BRAS, IMU_MAIN, IMU_EPAULE, IMU_INDEX, IMU_MAJEUR,IMU_ANNU ,IMU_AURI, IMU_POUCE
+  IMU_AVANT_BRAS, IMU_MAIN, IMU_EPAULE, IMU_INDEX, IMU_MAJEUR, IMU_ANNU , IMU_AURI, IMU_POUCE
 };
 
 char message[64] = {};
 char messageDebug[64] = {};
-void update_mux(int id){
-  switch(id){
+void update_mux(int id) {
+  switch (id) {
     case 0:
       //avant-bras -- logic
       digitalWrite(21, HIGH);
@@ -77,7 +85,7 @@ void update_mux(int id){
       digitalWrite(38, HIGH);
       digitalWrite(35, HIGH);
       digitalWrite(36, HIGH);
-    break;
+      break;
 
     case 1:
       //main
@@ -86,7 +94,7 @@ void update_mux(int id){
       digitalWrite(38, HIGH);
       digitalWrite(35, LOW);
       digitalWrite(36, HIGH);
-    break;
+      break;
 
     case 2:
       //épaule
@@ -95,7 +103,7 @@ void update_mux(int id){
       digitalWrite(38, LOW);
       digitalWrite(35, HIGH);
       digitalWrite(36, HIGH);
-    break;
+      break;
 
     case 3:
       //index
@@ -104,7 +112,7 @@ void update_mux(int id){
       digitalWrite(38, HIGH);
       digitalWrite(35, LOW);
       digitalWrite(36, LOW);
-    break;
+      break;
 
     case 4:
       //majeur
@@ -113,7 +121,7 @@ void update_mux(int id){
       digitalWrite(38, HIGH);
       digitalWrite(35, LOW);
       digitalWrite(36, LOW);
-    break;
+      break;
 
     case 5:
       //annulaire
@@ -122,7 +130,7 @@ void update_mux(int id){
       digitalWrite(38, HIGH);
       digitalWrite(35, HIGH);
       digitalWrite(36, LOW);
-    break;
+      break;
 
     case 6:
       //auriculaire
@@ -131,7 +139,7 @@ void update_mux(int id){
       digitalWrite(38, HIGH);
       digitalWrite(35, HIGH);
       digitalWrite(36, LOW);
-    break;
+      break;
 
     case 7:
       //pouce
@@ -140,7 +148,7 @@ void update_mux(int id){
       digitalWrite(38, HIGH);
       digitalWrite(35, LOW);
       digitalWrite(36, HIGH);
-    break;
+      break;
 
     default:
       digitalWrite(21, LOW);
@@ -148,18 +156,18 @@ void update_mux(int id){
       digitalWrite(38, HIGH);
       digitalWrite(35, HIGH);
       digitalWrite(36, HIGH);
-    break;
-    
-    }
+      break;
+
+  }
 }
 void setup() {
   delay(2000);
   Serial.begin(115200);
   Wire.begin(17, 18);
   updateHaptic();
-  while(!Serial) {}
+  while (!Serial) {}
 
-  // heart beat pin 
+  // heart beat pin
   pinMode(HEART_BEAT_PIN, OUTPUT);
 
 
@@ -172,59 +180,52 @@ void setup() {
   delay(500);
 
 
-  for(int i = 0; i < NUMSENSORS; i++){
+  for (int i = 0; i < NUMSENSORS; i++) {
     delay(300);
-    update_mux(-1);
     update_mux(i);
-    if(!sensors[i].init()){
-      Serial.println((String)"| finger " + i + " does not respond");
-      update_mux(-1);
-      
+    int attempts = 0;
+    bool response = false;
+    do {
+      response = sensors[i].init();
+      attempts++;
     }
-    else{
-      Serial.println((String)"| finger " + i + " is connected");
-      update_mux(-1);
-      }
-    
-    
+
+    while (!response && attempts < 5);
+
+
+
     delay(500);
     /******************* Basic Settings ******************/
-    
+
     /* You can set the SPI clock speed. The default is 8 MHz. */
-    update_mux(-1);
-    update_mux(i);
+
     sensors[i].setSPIClockSpeed(1000000);
-    update_mux(-1);
+
     Serial.println("| Position your ICM20948 flat and don't move it - calibrating...");
     delay(800);
-    update_mux(-1);
-    update_mux(i);
     sensors[i].autoOffsets();
-    update_mux(-1);
     delay(800);
-    Serial.println("| Done!"); 
-    /*sensors[i].setAccRange(ICM20948_ACC_RANGE_2G);
-    sensors[i].setAccDLPF(ICM20948_DLPF_1);    
+    Serial.println("| Done!");
+    sensors[i].setAccRange(ICM20948_ACC_RANGE_2G);
+    sensors[i].setAccDLPF(ICM20948_DLPF_1);
     sensors[i].setAccSampleRateDivider(1);
     sensors[i].setGyrRange(ICM20948_GYRO_RANGE_250);
-    sensors[i].setGyrDLPF(ICM20948_DLPF_1);  
-    sensors[i].setGyrSampleRateDivider(1);*/
+    sensors[i].setGyrDLPF(ICM20948_DLPF_1);
+    sensors[i].setGyrSampleRateDivider(1);
     delay(100);
     SPI.end();
   }
-    SPI.begin();
-}  
+  SPI.begin();
+}
 
 void loop() {
-  for(int i = 0; i < NUMSENSORS; i++){
-    update_mux(-1);
+  for (int i = 0; i < NUMSENSORS; i++) {
     update_mux(i);
     sensors[i].readSensor();
-    update_mux(-1);
     xyzFloat acc = sensors[i].getGValues();
     xyzFloat gyr = sensors[i].getGyrValues();
-    
-    sprintf(message,"%d %0.2f %0.2f %0.2f %0.2f %0.2f %0.2f", i, acc.x, acc.y, acc.z, gyr.x, gyr.y, gyr.z);
+
+    sprintf(message, "%d %0.2f %0.2f %0.2f %0.2f %0.2f %0.2f", i, acc.x, acc.y, acc.z, gyr.x, gyr.y, gyr.z);
     Serial.println(message);
   }
   if (Serial.available() >= 3) {  // Check if we have enough bytes (ID, 2 flags)
@@ -236,7 +237,7 @@ void loop() {
     int intId = id - '0';          // Convert '0' to '9' to int 0 to 9
     bool boolFlag1 = flag1 - '0';  // Convert '0' or '1' to boolean
     bool boolFlag2 = flag2 - '0';
-    updateHapticData(intId,boolFlag1,boolFlag2);
+    updateHapticData(intId, boolFlag1, boolFlag2);
   }
   updateHaptic();
   delay(50);
