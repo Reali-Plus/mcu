@@ -57,9 +57,9 @@ ICM20948_WE IMU_AVANT_BRAS = ICM20948_WE(37,spi);
 ICM20948_WE IMU_MAIN = ICM20948_WE(35,spi);
 ICM20948_WE IMU_EPAULE = ICM20948_WE(38,spi);
 ICM20948_WE IMU_AURI = ICM20948_WE(36,spi);
-ICM20948_WE IMU_ANNU = ICM20948_WE(21,spi);
-ICM20948_WE IMU_MAJEUR = ICM20948_WE(35,spi);
-ICM20948_WE IMU_INDEX = ICM20948_WE(21,spi);
+ICM20948_WE IMU_ANNU = ICM20948_WE(36,spi);
+ICM20948_WE IMU_MAJEUR = ICM20948_WE(36,spi);
+ICM20948_WE IMU_INDEX = ICM20948_WE(35,spi);
 ICM20948_WE IMU_POUCE = ICM20948_WE(35,spi);
 
 ICM20948_WE sensors[NUMSENSORS] = {
@@ -143,7 +143,7 @@ void update_mux(int id){
     break;
 
     default:
-      digitalWrite(21, HIGH);
+      digitalWrite(21, LOW);
       digitalWrite(37, HIGH);
       digitalWrite(38, HIGH);
       digitalWrite(35, HIGH);
@@ -153,6 +153,7 @@ void update_mux(int id){
     }
 }
 void setup() {
+  delay(2000);
   Serial.begin(115200);
   Wire.begin(17, 18);
   updateHaptic();
@@ -168,54 +169,58 @@ void setup() {
   pinMode(35, OUTPUT);
   pinMode(36, OUTPUT);
 
-  delay(200);
-  
-
-  Serial.begin(115200);
-  while(!Serial) {}
+  delay(500);
 
 
   for(int i = 0; i < NUMSENSORS; i++){
+    delay(300);
+    update_mux(-1);
     update_mux(i);
     if(!sensors[i].init()){
-
-    Serial.println((String)"| finger " + i + " does not respond"); 
-    digitalWrite(HEART_BEAT_PIN, HIGH);
-    delay(100);
-    digitalWrite(HEART_BEAT_PIN, LOW);
-    delay(100);
+      Serial.println((String)"| finger " + i + " does not respond");
+      update_mux(-1);
+      
     }
     else{
       Serial.println((String)"| finger " + i + " is connected");
-    }
+      update_mux(-1);
+      }
     
-    delay(200);
+    
+    delay(500);
     /******************* Basic Settings ******************/
     
-    /* You can set the SPI clock speed. The default is 8 MHz. */ 
-    sensors[i].setSPIClockSpeed(4000000);
-    
+    /* You can set the SPI clock speed. The default is 8 MHz. */
+    update_mux(-1);
+    update_mux(i);
+    sensors[i].setSPIClockSpeed(1000000);
+    update_mux(-1);
     Serial.println("| Position your ICM20948 flat and don't move it - calibrating...");
-    delay(200);
+    delay(800);
+    update_mux(-1);
+    update_mux(i);
     sensors[i].autoOffsets();
+    update_mux(-1);
+    delay(800);
     Serial.println("| Done!"); 
-    
-    sensors[i].setAccRange(ICM20948_ACC_RANGE_2G);
-    sensors[i].setAccDLPF(ICM20948_DLPF_6);    
+    /*sensors[i].setAccRange(ICM20948_ACC_RANGE_2G);
+    sensors[i].setAccDLPF(ICM20948_DLPF_1);    
     sensors[i].setAccSampleRateDivider(1);
-    sensors[i].setGyrRange(ICM20948_GYRO_RANGE_500);
-    sensors[i].setGyrDLPF(ICM20948_DLPF_6);  
-    sensors[i].setGyrSampleRateDivider(10);
-    sensors[i].setTempDLPF(ICM20948_DLPF_6);
-    sensors[i].setMagOpMode(AK09916_CONT_MODE_20HZ);
-    
+    sensors[i].setGyrRange(ICM20948_GYRO_RANGE_250);
+    sensors[i].setGyrDLPF(ICM20948_DLPF_1);  
+    sensors[i].setGyrSampleRateDivider(1);*/
+    delay(100);
+    SPI.end();
   }
+    SPI.begin();
 }  
 
 void loop() {
   for(int i = 0; i < NUMSENSORS; i++){
+    update_mux(-1);
     update_mux(i);
     sensors[i].readSensor();
+    update_mux(-1);
     xyzFloat acc = sensors[i].getGValues();
     xyzFloat gyr = sensors[i].getGyrValues();
     
