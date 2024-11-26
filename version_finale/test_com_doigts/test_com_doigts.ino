@@ -12,10 +12,10 @@ byte hapticData = 0x00;
 void updateHaptic() {
   Serial.println(hapticData, BIN);  
 
-  digitalWrite(GPIO0, hapticData & 0b0001 ? HIGH : LOW);
-  digitalWrite(GPIO1, hapticData & 0b0010 ? HIGH : LOW);
-  digitalWrite(GPIO2, hapticData & 0b0100 ? HIGH : LOW);
-  digitalWrite(GPIO3, hapticData & 0b1000 ? HIGH : LOW);
+  digitalWrite(GPIO0, hapticData & 0b0001 ? LOW : HIGH);
+  digitalWrite(GPIO1, hapticData & 0b0010 ? LOW : HIGH);
+  digitalWrite(GPIO2, hapticData & 0b0100 ? LOW : HIGH);
+  digitalWrite(GPIO3, hapticData & 0b1000 ? LOW : HIGH);
 }
 
 void updateHapticData(int id, bool flag1, bool flag2) {
