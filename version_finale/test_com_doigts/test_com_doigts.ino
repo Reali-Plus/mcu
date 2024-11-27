@@ -232,7 +232,7 @@ void loop() {
     char id = Serial.read();       // Read the ID character
     char flag1 = Serial.read();    // Read the first boolean character
     char flag2 = Serial.read();    // Read the second boolean character
-
+    while(Serial.available()){Serial.read();}
     // Convert characters to integers
     int intId = id - '0';          // Convert '0' to '9' to int 0 to 9
     bool boolFlag1 = flag1 - '0';  // Convert '0' or '1' to boolean
