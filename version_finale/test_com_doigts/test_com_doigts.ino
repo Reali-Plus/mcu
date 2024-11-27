@@ -2,10 +2,10 @@ bool hapticUpdate = false;
 const int NUMSENSORS = 8;
 
 const int HEART_BEAT_PIN = 4;
-const int GPIO0 = 5;
 const int GPIO0 = 6;
-const int GPIO0 = 7;
-const int GPIO0 = 8;
+const int GPIO1 = 7;
+const int GPIO2 = 8;
+const int GPIO3 = 9;
 
 byte hapticData = 0x00;
 
