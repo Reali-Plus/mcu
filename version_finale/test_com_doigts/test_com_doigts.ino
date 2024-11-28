@@ -3,6 +3,12 @@
 #include <Wire.h>
 
 #define PCF8574_ADDRESS 0x20
+
+#define LOOP_DELAY 50
+#define HAPTIC_DELAY 1000
+#define SKIP_CALIBRATION false
+
+
 bool spi = true;
 bool hapticUpdate = false;
 const int NUMSENSORS = 8;
@@ -12,6 +18,8 @@ const int HEART_BEAT_PIN = 5;
 
 float sensorData[48];
 byte hapticData = 0x00;
+
+int hapticResetCounter = 0;
 
 void updateHaptic() {
   Wire.beginTransmission(PCF8574_ADDRESS);
@@ -179,6 +187,9 @@ void setup() {
 
   delay(500);
 
+  if(SKIP_CALIBRATION)
+    return;
+
 
   for (int i = 0; i < NUMSENSORS; i++) {
     delay(300);
@@ -233,12 +244,36 @@ void loop() {
     char flag1 = Serial.read();    // Read the first boolean character
     char flag2 = Serial.read();    // Read the second boolean character
 
+    while(Serial.available()) Serial.read();
+
     // Convert characters to integers
     int intId = id - '0';          // Convert '0' to '9' to int 0 to 9
     bool boolFlag1 = flag1 - '0';  // Convert '0' or '1' to boolean
     bool boolFlag2 = flag2 - '0';
-    updateHapticData(intId, boolFlag1, boolFlag2);
+
+    if (intId == 3 || intId == 4 || intId == 5 || intId == 6)
+    {
+      updateHapticData(3, boolFlag1, boolFlag2);
+      updateHapticData(4, boolFlag1, boolFlag2);
+      updateHapticData(5, boolFlag1, boolFlag2);
+      updateHapticData(6, boolFlag1, boolFlag2);
+    }
+    else
+    {
+      updateHapticData(intId, boolFlag1, boolFlag2);
+    }
+
+    hapticResetCounter = 0;
   }
+
   updateHaptic();
-  delay(50);
+  delay(LOOP_DELAY);
+
+  if(hapticResetCounter++ >= HAPTIC_DELAY / LOOP_DELAY)
+  {
+    updateHapticData(3, false, false);
+    updateHapticData(4, false, false);
+    updateHapticData(5, false, false);
+    updateHapticData(6, false, false);
+  }
 }
