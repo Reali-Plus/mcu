@@ -66,6 +66,11 @@ void setup() {
   pinMode(GPIO1, OUTPUT);
   pinMode(GPIO2, OUTPUT);
   pinMode(GPIO3, OUTPUT);
+
+  digitalWrite(GPIO0, HIGH);
+  digitalWrite(GPIO1, HIGH);
+  digitalWrite(GPIO2, HIGH);
+  digitalWrite(GPIO3, HIGH);
 }
 
 void loop() {
