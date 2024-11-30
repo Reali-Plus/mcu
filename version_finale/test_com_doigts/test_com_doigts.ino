@@ -190,8 +190,12 @@ void setup() {
   if(SKIP_CALIBRATION)
     return;
 
+  int i = 0;
+  initloop:
+  for (; i < NUMSENSORS; i++) {
+    Serial.println("---------------");
+    Serial.println(i);
 
-  for (int i = 0; i < NUMSENSORS; i++) {
     delay(300);
     update_mux(i);
     int attempts = 0;
@@ -202,6 +206,13 @@ void setup() {
     }
 
     while (!response && attempts < 5);
+
+    if (attempts >= 5)
+    {
+      Serial.println("AAAAA");
+      i++;
+      goto vachier;
+    }
 
 
 
@@ -227,6 +238,11 @@ void setup() {
     SPI.end();
   }
   SPI.begin();
+  return;
+
+  vachier:
+  SPI.end();
+  goto initloop;
 }
 
 void loop() {
